@@ -1,0 +1,646 @@
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  [32m+[0m create
+[0m
+Terraform will perform the following actions:
+
+[1m  # random_password.passwords["aa_admin"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "random_password" "passwords" {
+      [32m+[0m [0m[1m[0mid[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0mlength[0m[0m           = 16
+      [32m+[0m [0m[1m[0mlower[0m[0m            = true
+      [32m+[0m [0m[1m[0mmin_lower[0m[0m        = 0
+      [32m+[0m [0m[1m[0mmin_numeric[0m[0m      = 1
+      [32m+[0m [0m[1m[0mmin_special[0m[0m      = 3
+      [32m+[0m [0m[1m[0mmin_upper[0m[0m        = 1
+      [32m+[0m [0m[1m[0mnumber[0m[0m           = true
+      [32m+[0m [0m[1m[0moverride_special[0m[0m = "@#%&?"
+      [32m+[0m [0m[1m[0mresult[0m[0m           = (sensitive value)
+      [32m+[0m [0m[1m[0mspecial[0m[0m          = true
+      [32m+[0m [0m[1m[0mupper[0m[0m            = true
+    }
+
+[1m  # random_password.passwords["aa_audejavel2"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "random_password" "passwords" {
+      [32m+[0m [0m[1m[0mid[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0mlength[0m[0m           = 16
+      [32m+[0m [0m[1m[0mlower[0m[0m            = true
+      [32m+[0m [0m[1m[0mmin_lower[0m[0m        = 0
+      [32m+[0m [0m[1m[0mmin_numeric[0m[0m      = 1
+      [32m+[0m [0m[1m[0mmin_special[0m[0m      = 3
+      [32m+[0m [0m[1m[0mmin_upper[0m[0m        = 1
+      [32m+[0m [0m[1m[0mnumber[0m[0m           = true
+      [32m+[0m [0m[1m[0moverride_special[0m[0m = "@#%&?"
+      [32m+[0m [0m[1m[0mresult[0m[0m           = (sensitive value)
+      [32m+[0m [0m[1m[0mspecial[0m[0m          = true
+      [32m+[0m [0m[1m[0mupper[0m[0m            = true
+    }
+
+[1m  # random_password.passwords["aa_readonly"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "random_password" "passwords" {
+      [32m+[0m [0m[1m[0mid[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0mlength[0m[0m           = 16
+      [32m+[0m [0m[1m[0mlower[0m[0m            = true
+      [32m+[0m [0m[1m[0mmin_lower[0m[0m        = 0
+      [32m+[0m [0m[1m[0mmin_numeric[0m[0m      = 1
+      [32m+[0m [0m[1m[0mmin_special[0m[0m      = 3
+      [32m+[0m [0m[1m[0mmin_upper[0m[0m        = 1
+      [32m+[0m [0m[1m[0mnumber[0m[0m           = true
+      [32m+[0m [0m[1m[0moverride_special[0m[0m = "@#%&?"
+      [32m+[0m [0m[1m[0mresult[0m[0m           = (sensitive value)
+      [32m+[0m [0m[1m[0mspecial[0m[0m          = true
+      [32m+[0m [0m[1m[0mupper[0m[0m            = true
+    }
+
+[1m  # module.create_users.null_resource.pgusers_postprocessing_playbook["aa_admin"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "null_resource" "pgusers_postprocessing_playbook" {
+      [32m+[0m [0m[1m[0mid[0m[0m       = (known after apply)
+      [32m+[0m [0m[1m[0mtriggers[0m[0m = (known after apply)
+    }
+
+[1m  # module.create_users.null_resource.pgusers_postprocessing_playbook["aa_audejavel2"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "null_resource" "pgusers_postprocessing_playbook" {
+      [32m+[0m [0m[1m[0mid[0m[0m       = (known after apply)
+      [32m+[0m [0m[1m[0mtriggers[0m[0m = (known after apply)
+    }
+
+[1m  # module.create_users.null_resource.pgusers_postprocessing_playbook["aa_readonly"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "null_resource" "pgusers_postprocessing_playbook" {
+      [32m+[0m [0m[1m[0mid[0m[0m       = (known after apply)
+      [32m+[0m [0m[1m[0mtriggers[0m[0m = (known after apply)
+    }
+
+[1m  # module.create_users.postgresql_role.app_users["aa_admin"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_role" "app_users" {
+      [32m+[0m [0m[1m[0mbypass_row_level_security[0m[0m = false
+      [32m+[0m [0m[1m[0mconnection_limit[0m[0m          = -1
+      [32m+[0m [0m[1m[0mcreate_database[0m[0m           = false
+      [32m+[0m [0m[1m[0mcreate_role[0m[0m               = false
+      [32m+[0m [0m[1m[0mencrypted_password[0m[0m        = true
+      [32m+[0m [0m[1m[0mid[0m[0m                        = (known after apply)
+      [32m+[0m [0m[1m[0minherit[0m[0m                   = true
+      [32m+[0m [0m[1m[0mlogin[0m[0m                     = true
+      [32m+[0m [0m[1m[0mname[0m[0m                      = "aa_admin"
+      [32m+[0m [0m[1m[0mpassword[0m[0m                  = (sensitive value)
+      [32m+[0m [0m[1m[0mreplication[0m[0m               = false
+      [32m+[0m [0m[1m[0mroles[0m[0m                     = [
+          [32m+[0m [0m"app_releng_role",
+        ]
+      [32m+[0m [0m[1m[0mskip_drop_role[0m[0m            = false
+      [32m+[0m [0m[1m[0mskip_reassign_owned[0m[0m       = false
+      [32m+[0m [0m[1m[0msuperuser[0m[0m                 = false
+      [32m+[0m [0m[1m[0mvalid_until[0m[0m               = "2022-11-25 00:00:00+00"
+    }
+
+[1m  # module.create_users.postgresql_role.app_users["aa_audejavel2"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_role" "app_users" {
+      [32m+[0m [0m[1m[0mbypass_row_level_security[0m[0m = false
+      [32m+[0m [0m[1m[0mconnection_limit[0m[0m          = -1
+      [32m+[0m [0m[1m[0mcreate_database[0m[0m           = false
+      [32m+[0m [0m[1m[0mcreate_role[0m[0m               = false
+      [32m+[0m [0m[1m[0mencrypted_password[0m[0m        = true
+      [32m+[0m [0m[1m[0mid[0m[0m                        = (known after apply)
+      [32m+[0m [0m[1m[0minherit[0m[0m                   = true
+      [32m+[0m [0m[1m[0mlogin[0m[0m                     = true
+      [32m+[0m [0m[1m[0mname[0m[0m                      = "aa_audejavel2"
+      [32m+[0m [0m[1m[0mpassword[0m[0m                  = (sensitive value)
+      [32m+[0m [0m[1m[0mreplication[0m[0m               = false
+      [32m+[0m [0m[1m[0mroles[0m[0m                     = [
+          [32m+[0m [0m"app_readonly_role",
+        ]
+      [32m+[0m [0m[1m[0mskip_drop_role[0m[0m            = false
+      [32m+[0m [0m[1m[0mskip_reassign_owned[0m[0m       = false
+      [32m+[0m [0m[1m[0msuperuser[0m[0m                 = false
+      [32m+[0m [0m[1m[0mvalid_until[0m[0m               = "2022-11-25 00:00:00+00"
+    }
+
+[1m  # module.create_users.postgresql_role.app_users["aa_readonly"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_role" "app_users" {
+      [32m+[0m [0m[1m[0mbypass_row_level_security[0m[0m = false
+      [32m+[0m [0m[1m[0mconnection_limit[0m[0m          = -1
+      [32m+[0m [0m[1m[0mcreate_database[0m[0m           = false
+      [32m+[0m [0m[1m[0mcreate_role[0m[0m               = false
+      [32m+[0m [0m[1m[0mencrypted_password[0m[0m        = true
+      [32m+[0m [0m[1m[0mid[0m[0m                        = (known after apply)
+      [32m+[0m [0m[1m[0minherit[0m[0m                   = true
+      [32m+[0m [0m[1m[0mlogin[0m[0m                     = true
+      [32m+[0m [0m[1m[0mname[0m[0m                      = "aa_readonly"
+      [32m+[0m [0m[1m[0mpassword[0m[0m                  = (sensitive value)
+      [32m+[0m [0m[1m[0mreplication[0m[0m               = false
+      [32m+[0m [0m[1m[0mroles[0m[0m                     = [
+          [32m+[0m [0m"app_readonly_role",
+        ]
+      [32m+[0m [0m[1m[0mskip_drop_role[0m[0m            = false
+      [32m+[0m [0m[1m[0mskip_reassign_owned[0m[0m       = false
+      [32m+[0m [0m[1m[0msuperuser[0m[0m                 = false
+      [32m+[0m [0m[1m[0mvalid_until[0m[0m               = "2022-11-25 00:00:00+00"
+    }
+
+[1m  # module.fake_user_password["aa_admin"].aws_ssm_parameter.config["db_aa_admin_password"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "aws_ssm_parameter" "config" {
+      [32m+[0m [0m[1m[0marn[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mdata_type[0m[0m   = (known after apply)
+      [32m+[0m [0m[1m[0mdescription[0m[0m = "db user param value rds database"
+      [32m+[0m [0m[1m[0mid[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mkey_id[0m[0m      = (known after apply)
+      [32m+[0m [0m[1m[0mname[0m[0m        = "/sta/david/rds/db_aa_admin_password"
+      [32m+[0m [0m[1m[0moverwrite[0m[0m   = false
+      [32m+[0m [0m[1m[0mtags[0m[0m        = {
+          [32m+[0m [0m"environment" = "sta"
+        }
+      [32m+[0m [0m[1m[0mtags_all[0m[0m    = {
+          [32m+[0m [0m"environment" = "sta"
+        }
+      [32m+[0m [0m[1m[0mtier[0m[0m        = "Standard"
+      [32m+[0m [0m[1m[0mtype[0m[0m        = "SecureString"
+      [32m+[0m [0m[1m[0mvalue[0m[0m       = (sensitive value)
+      [32m+[0m [0m[1m[0mversion[0m[0m     = (known after apply)
+    }
+
+[1m  # module.fake_user_password["aa_audejavel2"].aws_ssm_parameter.config["db_aa_audejavel2_password"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "aws_ssm_parameter" "config" {
+      [32m+[0m [0m[1m[0marn[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mdata_type[0m[0m   = (known after apply)
+      [32m+[0m [0m[1m[0mdescription[0m[0m = "db user param value rds database"
+      [32m+[0m [0m[1m[0mid[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mkey_id[0m[0m      = (known after apply)
+      [32m+[0m [0m[1m[0mname[0m[0m        = "/sta/david/rds/db_aa_audejavel2_password"
+      [32m+[0m [0m[1m[0moverwrite[0m[0m   = false
+      [32m+[0m [0m[1m[0mtags[0m[0m        = {
+          [32m+[0m [0m"environment" = "sta"
+        }
+      [32m+[0m [0m[1m[0mtags_all[0m[0m    = {
+          [32m+[0m [0m"environment" = "sta"
+        }
+      [32m+[0m [0m[1m[0mtier[0m[0m        = "Standard"
+      [32m+[0m [0m[1m[0mtype[0m[0m        = "SecureString"
+      [32m+[0m [0m[1m[0mvalue[0m[0m       = (sensitive value)
+      [32m+[0m [0m[1m[0mversion[0m[0m     = (known after apply)
+    }
+
+[1m  # module.fake_user_password["aa_readonly"].aws_ssm_parameter.config["db_aa_readonly_password"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "aws_ssm_parameter" "config" {
+      [32m+[0m [0m[1m[0marn[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mdata_type[0m[0m   = (known after apply)
+      [32m+[0m [0m[1m[0mdescription[0m[0m = "db user param value rds database"
+      [32m+[0m [0m[1m[0mid[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mkey_id[0m[0m      = (known after apply)
+      [32m+[0m [0m[1m[0mname[0m[0m        = "/sta/david/rds/db_aa_readonly_password"
+      [32m+[0m [0m[1m[0moverwrite[0m[0m   = false
+      [32m+[0m [0m[1m[0mtags[0m[0m        = {
+          [32m+[0m [0m"environment" = "sta"
+        }
+      [32m+[0m [0m[1m[0mtags_all[0m[0m    = {
+          [32m+[0m [0m"environment" = "sta"
+        }
+      [32m+[0m [0m[1m[0mtier[0m[0m        = "Standard"
+      [32m+[0m [0m[1m[0mtype[0m[0m        = "SecureString"
+      [32m+[0m [0m[1m[0mvalue[0m[0m       = (sensitive value)
+      [32m+[0m [0m[1m[0mversion[0m[0m     = (known after apply)
+    }
+
+[1m  # module.initdb.postgresql_database.db[0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_database" "db" {
+      [32m+[0m [0m[1m[0mallow_connections[0m[0m = true
+      [32m+[0m [0m[1m[0mconnection_limit[0m[0m  = -1
+      [32m+[0m [0m[1m[0mencoding[0m[0m          = "UTF8"
+      [32m+[0m [0m[1m[0mid[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mis_template[0m[0m       = (known after apply)
+      [32m+[0m [0m[1m[0mlc_collate[0m[0m        = "en_US.UTF-8"
+      [32m+[0m [0m[1m[0mlc_ctype[0m[0m          = "en_US.UTF-8"
+      [32m+[0m [0m[1m[0mname[0m[0m              = "david"
+      [32m+[0m [0m[1m[0mowner[0m[0m             = "postgres"
+      [32m+[0m [0m[1m[0mtablespace_name[0m[0m   = (known after apply)
+      [32m+[0m [0m[1m[0mtemplate[0m[0m          = "template0"
+    }
+
+[1m  # module.initdb.postgresql_default_privileges.alter_defaults_privs["app_readonly_role_sequence_defaults_privs"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_default_privileges" "alter_defaults_privs" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m    = "david"
+      [32m+[0m [0m[1m[0mid[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mobject_type[0m[0m = "sequence"
+      [32m+[0m [0m[1m[0mowner[0m[0m       = "app_releng_role"
+      [32m+[0m [0m[1m[0mprivileges[0m[0m  = [
+          [32m+[0m [0m"SELECT",
+          [32m+[0m [0m"USAGE",
+        ]
+      [32m+[0m [0m[1m[0mrole[0m[0m        = "app_readonly_role"
+      [32m+[0m [0m[1m[0mschema[0m[0m      = "public"
+    }
+
+[1m  # module.initdb.postgresql_default_privileges.alter_defaults_privs["app_readonly_role_table_defaults_privs"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_default_privileges" "alter_defaults_privs" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m    = "david"
+      [32m+[0m [0m[1m[0mid[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mobject_type[0m[0m = "table"
+      [32m+[0m [0m[1m[0mowner[0m[0m       = "app_releng_role"
+      [32m+[0m [0m[1m[0mprivileges[0m[0m  = [
+          [32m+[0m [0m"REFERENCES",
+          [32m+[0m [0m"SELECT",
+          [32m+[0m [0m"TRIGGER",
+        ]
+      [32m+[0m [0m[1m[0mrole[0m[0m        = "app_readonly_role"
+      [32m+[0m [0m[1m[0mschema[0m[0m      = "public"
+    }
+
+[1m  # module.initdb.postgresql_default_privileges.alter_defaults_privs["app_readonly_role_type_defaults_privs"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_default_privileges" "alter_defaults_privs" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m    = "david"
+      [32m+[0m [0m[1m[0mid[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mobject_type[0m[0m = "type"
+      [32m+[0m [0m[1m[0mowner[0m[0m       = "app_releng_role"
+      [32m+[0m [0m[1m[0mprivileges[0m[0m  = [
+          [32m+[0m [0m"USAGE",
+        ]
+      [32m+[0m [0m[1m[0mrole[0m[0m        = "app_readonly_role"
+      [32m+[0m [0m[1m[0mschema[0m[0m      = "public"
+    }
+
+[1m  # module.initdb.postgresql_default_privileges.alter_defaults_privs["app_releng_role_type_defaults_privs"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_default_privileges" "alter_defaults_privs" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m    = "david"
+      [32m+[0m [0m[1m[0mid[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mobject_type[0m[0m = "type"
+      [32m+[0m [0m[1m[0mowner[0m[0m       = "postgres"
+      [32m+[0m [0m[1m[0mprivileges[0m[0m  = [
+          [32m+[0m [0m"USAGE",
+        ]
+      [32m+[0m [0m[1m[0mrole[0m[0m        = "app_releng_role"
+      [32m+[0m [0m[1m[0mschema[0m[0m      = "public"
+    }
+
+[1m  # module.initdb.postgresql_default_privileges.alter_defaults_privs["app_write_role_function_defaults_privs"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_default_privileges" "alter_defaults_privs" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m    = "david"
+      [32m+[0m [0m[1m[0mid[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mobject_type[0m[0m = "function"
+      [32m+[0m [0m[1m[0mowner[0m[0m       = "app_releng_role"
+      [32m+[0m [0m[1m[0mprivileges[0m[0m  = [
+          [32m+[0m [0m"EXECUTE",
+        ]
+      [32m+[0m [0m[1m[0mrole[0m[0m        = "app_write_role"
+      [32m+[0m [0m[1m[0mschema[0m[0m      = "public"
+    }
+
+[1m  # module.initdb.postgresql_default_privileges.alter_defaults_privs["app_write_role_sequence_defaults_privs"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_default_privileges" "alter_defaults_privs" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m    = "david"
+      [32m+[0m [0m[1m[0mid[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mobject_type[0m[0m = "sequence"
+      [32m+[0m [0m[1m[0mowner[0m[0m       = "app_releng_role"
+      [32m+[0m [0m[1m[0mprivileges[0m[0m  = [
+          [32m+[0m [0m"SELECT",
+          [32m+[0m [0m"USAGE",
+        ]
+      [32m+[0m [0m[1m[0mrole[0m[0m        = "app_write_role"
+      [32m+[0m [0m[1m[0mschema[0m[0m      = "public"
+    }
+
+[1m  # module.initdb.postgresql_default_privileges.alter_defaults_privs["app_write_role_table_defaults_privs"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_default_privileges" "alter_defaults_privs" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m    = "david"
+      [32m+[0m [0m[1m[0mid[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mobject_type[0m[0m = "table"
+      [32m+[0m [0m[1m[0mowner[0m[0m       = "app_releng_role"
+      [32m+[0m [0m[1m[0mprivileges[0m[0m  = [
+          [32m+[0m [0m"DELETE",
+          [32m+[0m [0m"INSERT",
+          [32m+[0m [0m"REFERENCES",
+          [32m+[0m [0m"SELECT",
+          [32m+[0m [0m"TRIGGER",
+          [32m+[0m [0m"UPDATE",
+        ]
+      [32m+[0m [0m[1m[0mrole[0m[0m        = "app_write_role"
+      [32m+[0m [0m[1m[0mschema[0m[0m      = "public"
+    }
+
+[1m  # module.initdb.postgresql_default_privileges.alter_defaults_privs["app_write_role_type_defaults_privs"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_default_privileges" "alter_defaults_privs" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m    = "david"
+      [32m+[0m [0m[1m[0mid[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mobject_type[0m[0m = "type"
+      [32m+[0m [0m[1m[0mowner[0m[0m       = "app_releng_role"
+      [32m+[0m [0m[1m[0mprivileges[0m[0m  = [
+          [32m+[0m [0m"USAGE",
+        ]
+      [32m+[0m [0m[1m[0mrole[0m[0m        = "app_write_role"
+      [32m+[0m [0m[1m[0mschema[0m[0m      = "public"
+    }
+
+[1m  # module.initdb.postgresql_grant.grant_roles_schema["app_readonly_role"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_grant" "grant_roles_schema" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m          = "david"
+      [32m+[0m [0m[1m[0mid[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mobject_type[0m[0m       = "schema"
+      [32m+[0m [0m[1m[0mprivileges[0m[0m        = [
+          [32m+[0m [0m"USAGE",
+        ]
+      [32m+[0m [0m[1m[0mrole[0m[0m              = "app_readonly_role"
+      [32m+[0m [0m[1m[0mschema[0m[0m            = "public"
+      [32m+[0m [0m[1m[0mwith_grant_option[0m[0m = false
+    }
+
+[1m  # module.initdb.postgresql_grant.grant_roles_schema["app_releng_role"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_grant" "grant_roles_schema" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m          = "david"
+      [32m+[0m [0m[1m[0mid[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mobject_type[0m[0m       = "schema"
+      [32m+[0m [0m[1m[0mprivileges[0m[0m        = [
+          [32m+[0m [0m"CREATE",
+          [32m+[0m [0m"USAGE",
+        ]
+      [32m+[0m [0m[1m[0mrole[0m[0m              = "app_releng_role"
+      [32m+[0m [0m[1m[0mschema[0m[0m            = "public"
+      [32m+[0m [0m[1m[0mwith_grant_option[0m[0m = false
+    }
+
+[1m  # module.initdb.postgresql_grant.grant_roles_schema["app_write_role"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_grant" "grant_roles_schema" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m          = "david"
+      [32m+[0m [0m[1m[0mid[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mobject_type[0m[0m       = "schema"
+      [32m+[0m [0m[1m[0mprivileges[0m[0m        = [
+          [32m+[0m [0m"USAGE",
+        ]
+      [32m+[0m [0m[1m[0mrole[0m[0m              = "app_write_role"
+      [32m+[0m [0m[1m[0mschema[0m[0m            = "public"
+      [32m+[0m [0m[1m[0mwith_grant_option[0m[0m = false
+    }
+
+[1m  # module.initdb.postgresql_grant.privileges["app_readonly_role_database_privs"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_grant" "privileges" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m          = "david"
+      [32m+[0m [0m[1m[0mid[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mobject_type[0m[0m       = "database"
+      [32m+[0m [0m[1m[0mprivileges[0m[0m        = [
+          [32m+[0m [0m"CONNECT",
+        ]
+      [32m+[0m [0m[1m[0mrole[0m[0m              = "app_readonly_role"
+      [32m+[0m [0m[1m[0mschema[0m[0m            = "public"
+      [32m+[0m [0m[1m[0mwith_grant_option[0m[0m = false
+    }
+
+[1m  # module.initdb.postgresql_grant.privileges["app_readonly_role_sequence_privs"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_grant" "privileges" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m          = "david"
+      [32m+[0m [0m[1m[0mid[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mobject_type[0m[0m       = "sequence"
+      [32m+[0m [0m[1m[0mprivileges[0m[0m        = [
+          [32m+[0m [0m"SELECT",
+          [32m+[0m [0m"USAGE",
+        ]
+      [32m+[0m [0m[1m[0mrole[0m[0m              = "app_readonly_role"
+      [32m+[0m [0m[1m[0mschema[0m[0m            = "public"
+      [32m+[0m [0m[1m[0mwith_grant_option[0m[0m = false
+    }
+
+[1m  # module.initdb.postgresql_grant.privileges["app_readonly_role_table_privs"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_grant" "privileges" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m          = "david"
+      [32m+[0m [0m[1m[0mid[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mobject_type[0m[0m       = "table"
+      [32m+[0m [0m[1m[0mprivileges[0m[0m        = [
+          [32m+[0m [0m"REFERENCES",
+          [32m+[0m [0m"SELECT",
+          [32m+[0m [0m"TRIGGER",
+        ]
+      [32m+[0m [0m[1m[0mrole[0m[0m              = "app_readonly_role"
+      [32m+[0m [0m[1m[0mschema[0m[0m            = "public"
+      [32m+[0m [0m[1m[0mwith_grant_option[0m[0m = false
+    }
+
+[1m  # module.initdb.postgresql_grant.privileges["app_releng_role_database_privs"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_grant" "privileges" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m          = "david"
+      [32m+[0m [0m[1m[0mid[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mobject_type[0m[0m       = "database"
+      [32m+[0m [0m[1m[0mprivileges[0m[0m        = [
+          [32m+[0m [0m"CONNECT",
+          [32m+[0m [0m"CREATE",
+          [32m+[0m [0m"TEMPORARY",
+        ]
+      [32m+[0m [0m[1m[0mrole[0m[0m              = "app_releng_role"
+      [32m+[0m [0m[1m[0mschema[0m[0m            = "public"
+      [32m+[0m [0m[1m[0mwith_grant_option[0m[0m = true
+    }
+
+[1m  # module.initdb.postgresql_grant.privileges["app_write_role_database_privs"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_grant" "privileges" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m          = "david"
+      [32m+[0m [0m[1m[0mid[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mobject_type[0m[0m       = "database"
+      [32m+[0m [0m[1m[0mprivileges[0m[0m        = [
+          [32m+[0m [0m"CONNECT",
+        ]
+      [32m+[0m [0m[1m[0mrole[0m[0m              = "app_write_role"
+      [32m+[0m [0m[1m[0mschema[0m[0m            = "public"
+      [32m+[0m [0m[1m[0mwith_grant_option[0m[0m = false
+    }
+
+[1m  # module.initdb.postgresql_grant.privileges["app_write_role_function_privs"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_grant" "privileges" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m          = "david"
+      [32m+[0m [0m[1m[0mid[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mobject_type[0m[0m       = "function"
+      [32m+[0m [0m[1m[0mprivileges[0m[0m        = [
+          [32m+[0m [0m"EXECUTE",
+        ]
+      [32m+[0m [0m[1m[0mrole[0m[0m              = "app_write_role"
+      [32m+[0m [0m[1m[0mschema[0m[0m            = "public"
+      [32m+[0m [0m[1m[0mwith_grant_option[0m[0m = false
+    }
+
+[1m  # module.initdb.postgresql_grant.privileges["app_write_role_sequence_privs"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_grant" "privileges" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m          = "david"
+      [32m+[0m [0m[1m[0mid[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mobject_type[0m[0m       = "sequence"
+      [32m+[0m [0m[1m[0mprivileges[0m[0m        = [
+          [32m+[0m [0m"SELECT",
+          [32m+[0m [0m"USAGE",
+        ]
+      [32m+[0m [0m[1m[0mrole[0m[0m              = "app_write_role"
+      [32m+[0m [0m[1m[0mschema[0m[0m            = "public"
+      [32m+[0m [0m[1m[0mwith_grant_option[0m[0m = false
+    }
+
+[1m  # module.initdb.postgresql_grant.privileges["app_write_role_table_privs"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_grant" "privileges" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m          = "david"
+      [32m+[0m [0m[1m[0mid[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mobject_type[0m[0m       = "table"
+      [32m+[0m [0m[1m[0mprivileges[0m[0m        = [
+          [32m+[0m [0m"DELETE",
+          [32m+[0m [0m"INSERT",
+          [32m+[0m [0m"REFERENCES",
+          [32m+[0m [0m"SELECT",
+          [32m+[0m [0m"TRIGGER",
+          [32m+[0m [0m"UPDATE",
+        ]
+      [32m+[0m [0m[1m[0mrole[0m[0m              = "app_write_role"
+      [32m+[0m [0m[1m[0mschema[0m[0m            = "public"
+      [32m+[0m [0m[1m[0mwith_grant_option[0m[0m = false
+    }
+
+[1m  # module.initdb.postgresql_grant.revoke_create_public[0][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_grant" "revoke_create_public" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m          = "david"
+      [32m+[0m [0m[1m[0mid[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mobject_type[0m[0m       = "schema"
+      [32m+[0m [0m[1m[0mrole[0m[0m              = "public"
+      [32m+[0m [0m[1m[0mschema[0m[0m            = "public"
+      [32m+[0m [0m[1m[0mwith_grant_option[0m[0m = false
+    }
+
+[1m  # module.initdb.postgresql_role.app_roles["app_readonly_role"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_role" "app_roles" {
+      [32m+[0m [0m[1m[0mbypass_row_level_security[0m[0m = false
+      [32m+[0m [0m[1m[0mconnection_limit[0m[0m          = -1
+      [32m+[0m [0m[1m[0mcreate_database[0m[0m           = false
+      [32m+[0m [0m[1m[0mcreate_role[0m[0m               = false
+      [32m+[0m [0m[1m[0mencrypted_password[0m[0m        = true
+      [32m+[0m [0m[1m[0mid[0m[0m                        = (known after apply)
+      [32m+[0m [0m[1m[0minherit[0m[0m                   = true
+      [32m+[0m [0m[1m[0mlogin[0m[0m                     = false
+      [32m+[0m [0m[1m[0mname[0m[0m                      = "app_readonly_role"
+      [32m+[0m [0m[1m[0mreplication[0m[0m               = false
+      [32m+[0m [0m[1m[0mskip_drop_role[0m[0m            = false
+      [32m+[0m [0m[1m[0mskip_reassign_owned[0m[0m       = false
+      [32m+[0m [0m[1m[0msuperuser[0m[0m                 = false
+      [32m+[0m [0m[1m[0mvalid_until[0m[0m               = "infinity"
+    }
+
+[1m  # module.initdb.postgresql_role.app_roles["app_releng_role"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_role" "app_roles" {
+      [32m+[0m [0m[1m[0mbypass_row_level_security[0m[0m = false
+      [32m+[0m [0m[1m[0mconnection_limit[0m[0m          = -1
+      [32m+[0m [0m[1m[0mcreate_database[0m[0m           = false
+      [32m+[0m [0m[1m[0mcreate_role[0m[0m               = true
+      [32m+[0m [0m[1m[0mencrypted_password[0m[0m        = true
+      [32m+[0m [0m[1m[0mid[0m[0m                        = (known after apply)
+      [32m+[0m [0m[1m[0minherit[0m[0m                   = true
+      [32m+[0m [0m[1m[0mlogin[0m[0m                     = false
+      [32m+[0m [0m[1m[0mname[0m[0m                      = "app_releng_role"
+      [32m+[0m [0m[1m[0mreplication[0m[0m               = false
+      [32m+[0m [0m[1m[0mskip_drop_role[0m[0m            = false
+      [32m+[0m [0m[1m[0mskip_reassign_owned[0m[0m       = false
+      [32m+[0m [0m[1m[0msuperuser[0m[0m                 = false
+      [32m+[0m [0m[1m[0mvalid_until[0m[0m               = "infinity"
+    }
+
+[1m  # module.initdb.postgresql_role.app_roles["app_write_role"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_role" "app_roles" {
+      [32m+[0m [0m[1m[0mbypass_row_level_security[0m[0m = false
+      [32m+[0m [0m[1m[0mconnection_limit[0m[0m          = -1
+      [32m+[0m [0m[1m[0mcreate_database[0m[0m           = false
+      [32m+[0m [0m[1m[0mcreate_role[0m[0m               = false
+      [32m+[0m [0m[1m[0mencrypted_password[0m[0m        = true
+      [32m+[0m [0m[1m[0mid[0m[0m                        = (known after apply)
+      [32m+[0m [0m[1m[0minherit[0m[0m                   = true
+      [32m+[0m [0m[1m[0mlogin[0m[0m                     = false
+      [32m+[0m [0m[1m[0mname[0m[0m                      = "app_write_role"
+      [32m+[0m [0m[1m[0mreplication[0m[0m               = false
+      [32m+[0m [0m[1m[0mskip_drop_role[0m[0m            = false
+      [32m+[0m [0m[1m[0mskip_reassign_owned[0m[0m       = false
+      [32m+[0m [0m[1m[0msuperuser[0m[0m                 = false
+      [32m+[0m [0m[1m[0mvalid_until[0m[0m               = "infinity"
+    }
+
+[1m  # module.initdb.postgresql_schema.schema[0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "postgresql_schema" "schema" {
+      [32m+[0m [0m[1m[0mdatabase[0m[0m      = "david"
+      [32m+[0m [0m[1m[0mdrop_cascade[0m[0m  = true
+      [32m+[0m [0m[1m[0mid[0m[0m            = (known after apply)
+      [32m+[0m [0m[1m[0mif_not_exists[0m[0m = true
+      [32m+[0m [0m[1m[0mname[0m[0m          = "public"
+      [32m+[0m [0m[1m[0mowner[0m[0m         = "postgres"
+
+      [32m+[0m [0mpolicy {
+          [32m+[0m [0m[1m[0mcreate[0m[0m            = (known after apply)
+          [32m+[0m [0m[1m[0mcreate_with_grant[0m[0m = (known after apply)
+          [32m+[0m [0m[1m[0mrole[0m[0m              = (known after apply)
+          [32m+[0m [0m[1m[0musage[0m[0m             = (known after apply)
+          [32m+[0m [0m[1m[0musage_with_grant[0m[0m  = (known after apply)
+        }
+    }
+
+[1m  # module.ssm_db_users["aa_admin"].aws_ssm_parameter.config["aa_admin_user"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "aws_ssm_parameter" "config" {
+      [32m+[0m [0m[1m[0marn[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mdata_type[0m[0m   = (known after apply)
+      [32m+[0m [0m[1m[0mdescription[0m[0m = "db user param value rds database"
+      [32m+[0m [0m[1m[0mid[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mkey_id[0m[0m      = (known after apply)
+      [32m+[0m [0m[1m[0mname[0m[0m        = "/sta/rds/david/rds/aa_admin_user"
+      [32m+[0m [0m[1m[0moverwrite[0m[0m   = false
+      [32m+[0m [0m[1m[0mtags[0m[0m        = {
+          [32m+[0m [0m"environment" = "sta"
+        }
+      [32m+[0m [0m[1m[0mtags_all[0m[0m    = {
+          [32m+[0m [0m"environment" = "sta"
+        }
+      [32m+[0m [0m[1m[0mtier[0m[0m        = "Standard"
+      [32m+[0m [0m[1m[0mtype[0m[0m        = "String"
+      [32m+[0m [0m[1m[0mvalue[0m[0m       = (sensitive value)
+      [32m+[0m [0m[1m[0mversion[0m[0m     = (known after apply)
+    }
+
+[1m  # module.ssm_db_users["aa_audejavel2"].aws_ssm_parameter.config["aa_audejavel2_user"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "aws_ssm_parameter" "config" {
+      [32m+[0m [0m[1m[0marn[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mdata_type[0m[0m   = (known after apply)
+      [32m+[0m [0m[1m[0mdescription[0m[0m = "db user param value rds database"
+      [32m+[0m [0m[1m[0mid[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mkey_id[0m[0m      = (known after apply)
+      [32m+[0m [0m[1m[0mname[0m[0m        = "/sta/rds/david/rds/aa_audejavel2_user"
+      [32m+[0m [0m[1m[0moverwrite[0m[0m   = false
+      [32m+[0m [0m[1m[0mtags[0m[0m        = {
+          [32m+[0m [0m"environment" = "sta"
+        }
+      [32m+[0m [0m[1m[0mtags_all[0m[0m    = {
+          [32m+[0m [0m"environment" = "sta"
+        }
+      [32m+[0m [0m[1m[0mtier[0m[0m        = "Standard"
+      [32m+[0m [0m[1m[0mtype[0m[0m        = "String"
+      [32m+[0m [0m[1m[0mvalue[0m[0m       = (sensitive value)
+      [32m+[0m [0m[1m[0mversion[0m[0m     = (known after apply)
+    }
+
+[1m  # module.ssm_db_users["aa_readonly"].aws_ssm_parameter.config["aa_readonly_user"][0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "aws_ssm_parameter" "config" {
+      [32m+[0m [0m[1m[0marn[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mdata_type[0m[0m   = (known after apply)
+      [32m+[0m [0m[1m[0mdescription[0m[0m = "db user param value rds database"
+      [32m+[0m [0m[1m[0mid[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mkey_id[0m[0m      = (known after apply)
+      [32m+[0m [0m[1m[0mname[0m[0m        = "/sta/rds/david/rds/aa_readonly_user"
+      [32m+[0m [0m[1m[0moverwrite[0m[0m   = false
+      [32m+[0m [0m[1m[0mtags[0m[0m        = {
+          [32m+[0m [0m"environment" = "sta"
+        }
+      [32m+[0m [0m[1m[0mtags_all[0m[0m    = {
+          [32m+[0m [0m"environment" = "sta"
+        }
+      [32m+[0m [0m[1m[0mtier[0m[0m        = "Standard"
+      [32m+[0m [0m[1m[0mtype[0m[0m        = "String"
+      [32m+[0m [0m[1m[0mvalue[0m[0m       = (sensitive value)
+      [32m+[0m [0m[1m[0mversion[0m[0m     = (known after apply)
+    }
+
+[0m[1mPlan:[0m 40 to add, 0 to change, 0 to destroy.
+[0m[0m
+[1mChanges to Outputs:[0m[0m
+  [32m+[0m [0m[1m[0maffected_schema[0m[0m  = "public"
+  [32m+[0m [0m[1m[0mconnect_string[0m[0m   = "psql -h winhost -p 5432 -U postgres -d david"
+  [32m+[0m [0m[1m[0mcreated_database[0m[0m = "david"
+  [32m+[0m [0m[1m[0mcreated_roles[0m[0m    = [
+      [32m+[0m [0m"app_releng_role",
+      [32m+[0m [0m"app_readonly_role",
+      [32m+[0m [0m"app_write_role",
+    ]
+[90m
+─────────────────────────────────────────────────────────────────────────────[0m
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.

@@ -1,0 +1,6 @@
+https://blog.gruntwork.io/a-comprehensive-guide-to-managing-secrets-in-your-terraform-code-1d586955ace1
+
+https://medium.com/hashicorp-engineering/creating-module-dependencies-in-terraform-0-13-4322702dac4a
+
+https://registry.terraform.io/modules/lgallard/secrets-manager/aws/latest?tab=outputs
+

@@ -1,0 +1,22 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+networks:
+  unNetwork:
+    driver: bridge
+
+
+services:
+
+  db:
+    image: postgres:13.4
+    restart: on-failure
+    networks:
+      - unNetwork
+    ports:
+      - 5432:5432
+#    volumes:
+#      - ./postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
+
