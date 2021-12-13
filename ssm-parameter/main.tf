@@ -2,7 +2,7 @@
 
 resource "aws_ssm_parameter" "config" {
   for_each    = var.parameters
-  name        = format("%s/%s/%s", var.namespace, var.service, each.key)
+  name        = format("%s/%s", var.namespace, each.key)
   type        = lookup(each.value, "type", "String")
   value       = lookup(each.value, "value", "*** NO VALUE SET ***")
   description = lookup(each.value, "description", "*** NO DESCRIPTION SET ***")

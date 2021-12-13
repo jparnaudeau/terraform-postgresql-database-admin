@@ -1,3 +1,7 @@
+########################################
+# Initialize the database and the objects 
+# (roles & grants), the default privileges
+########################################
 module "initdb" {
 
   source = "../../create-database"
@@ -16,18 +20,27 @@ module "initdb" {
   inputs = var.inputs
 }
 
-########################################
-# for each users defined in var.inputs,
-# create a fake password and save it into parameterStore
-# path : <namespace>/<service>/<username>_user"
-########################################
+####################################################################
+# for each users defined in var.inputs, create 
+# - a parameter in parameterStore for storing the user (path : <namespace>/<username>_user)
+# - create a fake password for this user and 
+# - save it into parameterStore at <namespace>/<username>_password
+# 
+# we do this for having only one case to manage in the postprocessing shell : 
+# we update systematically the value of the parameter
+####################################################################
+locals {
+  namespace = format("/%s/%s",var.environment,var.inputs["db_name"])
+  tags      = merge(var.tags,{"environment" = var.environment})
+}
+
+# the ssm parameters for storing username
 module "ssm_db_users" {
   source   = "../../ssm-parameter"
   for_each = { for user in var.inputs["db_users"] : user.name => user }
 
-  service   = "rds"
-  namespace = format("/%s/%s",var.environment,var.inputs["db_name"])
-  tags      = merge(var.tags,{"environment" = var.environment})
+  namespace = local.namespace
+  tags      = local.tags
 
   parameters = {
     format("%s_user", each.key) = {
@@ -38,6 +51,7 @@ module "ssm_db_users" {
   }
 }
 
+# the random passwords for each user
 resource "random_password" "passwords" {
   for_each = { for user in var.inputs["db_users"] : user.name => user }
 
@@ -52,17 +66,16 @@ resource "random_password" "passwords" {
   override_special = "@#%&?"
 }
 
-# path : <namespace>/<service>/db_<username>_password"
+# the ssm parameters for storing password of ech user
 module "fake_user_password" {
   source   = "../../ssm-parameter"
   for_each = { for user in var.inputs["db_users"] : user.name => user }
 
-  service   = "rds"
-  namespace = format("/%s/%s",var.environment,var.inputs["db_name"])
-  tags      = merge(var.tags,{"environment" = var.environment})
+  namespace = local.namespace
+  tags      = local.tags
 
   parameters = {
-    format("db_%s_password", each.key) = {
+    format("%s_password", each.key) = {
       description = "db user param value rds database"
       value       = random_password.passwords[each.key].result
       type        = "SecureString"

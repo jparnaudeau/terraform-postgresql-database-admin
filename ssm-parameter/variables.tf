@@ -5,15 +5,12 @@ variable "parameters" {
 }
 
 variable "namespace" {
+  type        = string 
   description = "Prefix prepended to parameter name if not using default"
-  #default     = "/service"
-}
-
-variable "service" {
-  description = "The name of the service to which this parameter list belongs, e.g. `rds`, `api`, `lambda-auth`"
-  type        = string
 }
 
 variable "tags" {
+  type        = map(string)
   description = "common tags"
+  default     = {}
 }
