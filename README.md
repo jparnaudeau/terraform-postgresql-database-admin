@@ -26,8 +26,10 @@ The diagram below illustrate what we neeed to do :
 |the user `application reporting`| This user is used inside the reporting application. |
 |the user `application backend`| This user is used inside the backend application. |
 
-Note : Roles are independent from the database and schema. But we advice to create the 3 roles (admin,readonly,write) for each database and do not shared roles accross databases. That why we prefixe the name of the role by `app`, a trigram that can easily differentiate role in real usecases. 
-Note : We create 3 roles (admin,write,readonly) but you can be more granular. By example, splitting the role write into several write roles, allowing the permissions insert/update/delete only on specific tables. the security pattern `Least privilege` can be applied at this level.
+Note : 
+
+* Roles are independent from the database and schema. But we advice to create the 3 roles (admin,readonly,write) for each database and do not shared roles accross databases. That why we prefixe the name of the role by `app`, a trigram that can easily differentiate role in real usecases. 
+* We create 3 roles (admin,write,readonly) but you can be more granular. By example, splitting the role write into several write roles, allowing the permissions insert/update/delete only on specific tables. the security pattern `Least privilege` can be applied at this level.
 
 
 ## Modules Description
@@ -47,6 +49,8 @@ This sub-module is in charge to create :
 
 Check the `simple-database` usecase to have a complete example.
 
+you could find all Inputs & outputs of this submodule here : [docs](./create-database/README.md)
+
 
 ### create-users & Password Management
 
@@ -59,12 +63,21 @@ This sub-module is in charge to create :
 
 check the `create-users-on-existent-database` or `all-in-one` usecases to have complete examples.
 
+you could find all Inputs & outputs of this submodule here : [docs](./create-users/README.md)
+
+### lambda-stream-audit
+
+TO COMPLETE
+
+[docs](./lambda-stream-audit/README.md)
+
+
 
 ## Usecases
 
 |Example|UseCase|
 |-------|--------|
-|[simple-database](./example/simple-database/HOWTO.md)|Demonstration How to create Database, Roles, and Grants objects|
+|[simple-database](./example/simple-database/HOWTO.md)|Demonstration How to create Database, Roles, and Grants objects.|
 |[create-users-on-existent-database](./example/create-users-on-existent-database/HOWTO.md)|From an existent database, you can create several users. This usecase use a trivial postprocessing playbook for example. **DO NOT USE THIS PLAYBOOK IN PRODUCTION, IT's NOT SAFE.**|
 |[all-in-one](./example/all-in-one/HOWTO.md)|Demonstration How to create Database, Roles, Users in one phase. This usecase use a postprocessing playbook that generate passwords, set password for each users, and store the password in the parameterStore into an AWS Account.|
 |[full-rds-example](./example/full-rds-example/HOWTO.md)|Demonstration for other features covered by the module : Demonstrate an another postprocessing playbook that generate passwords into AWS SecretsManager, deploy the `pgaudit` extension for real-time monitoring, and deploy lambda to stream the audit logs.|
@@ -79,26 +92,15 @@ Those modules uses the excellent [postgresql provider](https://registry.terrafor
 
 ### Tests environment
 
-You can find a docker-compose file to start locally a postgresql (version 13.4) database and set the password for postgres user. Use the command **docker-compose -f docker-compose.yml up -d**.  
+You can find a docker-compose file to start locally a postgresql (version 13.4) database and set the password for postgres user. Use the command `docker-compose -f docker-compose.yml up -d`.  
 
 
 ## Inputs & outputs
 
-you could find all Inputs & outputs of each submodule here :
+
 
 ### create-database
 
-[docs](./create-database/README.md)
+
 
 ### create-users
-
-[docs](./create-users/README.md)
-
-### lambda-stream-audit
-
-[docs](./lambda-stream-audit/README.md)
-
-
-### :warning: Important note:
-
-We highly recommand you using **explicitly a version tag of this module** instead of branch reference since the latter is changing frequently. (use **ref=v1.0.0**,  don't use **ref=master**) 
