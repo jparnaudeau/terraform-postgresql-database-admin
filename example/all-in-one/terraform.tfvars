@@ -1,6 +1,6 @@
 # provider connection infos
 pgadmin_user     = "postgres"
-dbhost           = "winhost"
+dbhost           = "localhost"
 expected_version = "12.0.0"
 sslmode          = "disable"
 
@@ -10,7 +10,7 @@ inputs = {
   # parameters used for creating database
   db_schema_name = "public"
   db_name        = "mydatabase"
-  db_admin       = "postgres"   #owner of the database
+  db_admin       = "app_admin_role"   #owner of the database
 
   # install extensions if needed
   extensions     = []
@@ -25,9 +25,9 @@ inputs = {
   # In this example, we create 3 roles
   # - "app_admin_role" will be the role used for creation, deletion, grant operations on objects, especially for tables.
   # - "app_write_role" for write operations. If you have a backend that insert lines into tables, it will used a user that inherits permissions from it.
-  # - "readonly" for readonly operations.
+  # - "app_readonly_role" for readonly operations.
   # Note : "write" role does not have the permissions to create table.
-  # Note : the createrole field is a boolean that provides a way to create other roles and put grants on it. Becarefull when you give this permission.
+  # Note : the 'createrole' field is a boolean that provides a way to create other roles and put grants on it. Be carefull when you give this permission.
   db_roles = [
     { id = "admin", role = "app_admin_role", inherit = true, login = false, validity = "infinity", privileges = ["USAGE", "CREATE"], createrole = true },
     { id = "readonly", role = "app_readonly_role", inherit = true, login = false, validity = "infinity", privileges = ["USAGE"], createrole = false },
@@ -63,9 +63,9 @@ inputs = {
   ],
 
   db_users = [
-    { name = "readonly", inherit = true, login = true, membership = ["app_readonly_role"], validity = "2022-11-25 00:00:00+00", connection_limit = -1, createrole = false },
-    { name = "backend", inherit = true, login = true, membership = ["app_write_role"], validity = "2022-11-25 00:00:00+00", connection_limit = -1, createrole = false },
-    { name = "admin", inherit = true, login = true, membership = ["app_admin_role"], validity = "2022-11-25 00:00:00+00", connection_limit = -1, createrole = false },
+    { name = "readonly", inherit = true, login = true, membership = ["app_readonly_role"], validity = "infinity", connection_limit = -1, createrole = false },
+    { name = "backend", inherit = true, login = true, membership = ["app_write_role"], validity = "infinity", connection_limit = -1, createrole = false },
+    { name = "admin", inherit = true, login = true, membership = ["app_admin_role"], validity = "infinity", connection_limit = -1, createrole = false },
   ]
 
 }

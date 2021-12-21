@@ -11,6 +11,10 @@ resource "postgresql_database" "db" {
   lc_ctype          = "en_US.UTF-8"
   connection_limit  = -1
   allow_connections = true
+
+  depends_on = [
+    postgresql_role.app_roles,
+  ]
 }
 
 ########################################
@@ -27,9 +31,6 @@ resource "postgresql_role" "app_roles" {
   roles       = lookup(each.value, "membership", null)
   search_path = lookup(each.value, "search_path", null)
 
-  depends_on = [
-    postgresql_database.db,
-  ]
 
   provisioner "local-exec" {
     when = create

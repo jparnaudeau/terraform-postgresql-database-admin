@@ -1,49 +1,90 @@
-## Requirements
+# terraform-postgresql-database-admin
 
-| Name | Version |
-|------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.12 |
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 0.13 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 2.70, < 4 |
-| <a name="requirement_null"></a> [null](#requirement\_null) | ~> 3.0.0 |
-| <a name="requirement_postgresql"></a> [postgresql](#requirement\_postgresql) | ~> 1.11.0 |
-| <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.0.0 |
+Terraform is a great tool to automate "everything" in modern IT. However, there is one area in which there is little: the management of users and their permissions in a postgresql database. 
 
-## Providers
+This module provides a way to manage securly and properly, the objects, inside a postgresql database. Based on best practices, describe in this blog : 
 
-| Name | Version |
-|------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 2.70, < 4 |
+https://aws.amazon.com/blogs/database/managing-postgresql-users-and-roles/
 
-## Modules
+Moreover, for a database deployed through the AWS Managed Service "RDS", this module also provides a way to deploy an audit system allowing to trace all the requests made, by whom, at what time and from which IP address.
 
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_initdb"></a> [initdb](#module\_initdb) | ../create-users |  |
+The module is divided into 2 sub-modules and several examples that illustrates different aspects of this problematic.
 
-## Resources
+* The creation of the database with the roles and the permissions associated with (named grant inside postgresql).
+* The creation of the user. For security perspective, user inherits permissions from role. A user should have an expiration date for his password.
 
-| Name | Type |
-|------|------|
-| [aws_db_instance.postgres](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/db_instance) | data source |
 
-## Inputs
+## Modules Description
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_costcenter"></a> [costcenter](#input\_costcenter) | CostCenter | `string` | n/a | yes |
-| <a name="input_data_service"></a> [data\_service](#input\_data\_service) | a constant string used in building parameterStore path | `string` | `"rds"` | no |
-| <a name="input_dbhost"></a> [dbhost](#input\_dbhost) | The Host of the RDS Instance. If empty, retrieve the amazon endpoint of the RDS Instance. | `string` | `""` | no |
-| <a name="input_dbid"></a> [dbid](#input\_dbid) | The Id of the RDS Instance | `string` | n/a | yes |
-| <a name="input_environment"></a> [environment](#input\_environment) | Envrionment name. Ie: dev, sandbox, ... | `string` | n/a | yes |
-| <a name="input_inputs"></a> [inputs](#input\_inputs) | The map containing all elements for creating objects inside database | <pre>object({<br>    db_schema_name = string<br>    db_name        = string<br>    db_admin       = string<br>    db_roles = list(object({<br>      id         = string<br>      role       = string<br>      inherit    = bool<br>      login      = bool<br>      validity   = string<br>      db         = string<br>      privileges = list(string)<br>      createrole = bool<br>    }))<br>    db_grants = list(object({<br>      object_type  = string<br>      privileges   = list(string)<br>      schema       = string<br>      db           = string<br>      role         = string<br>      owner_role   = string<br>      grant_option = bool<br>    }))<br>    db_users = list(object({<br>      name             = string<br>      inherit          = bool<br>      login            = bool<br>      membership       = list(string)<br>      validity         = string<br>      connection_limit = number<br>      createrole       = bool<br>    }))<br>  })</pre> | `null` | no |
-| <a name="input_owner"></a> [owner](#input\_owner) | Email of the team owning application | `string` | n/a | yes |
-| <a name="input_pgadmin_user"></a> [pgadmin\_user](#input\_pgadmin\_user) | The RDS user to used for creating/managing other user in the database. If empty, retrieve the master user of the RDS Instance | `string` | `""` | no |
-| <a name="input_product_name"></a> [product\_name](#input\_product\_name) | Application Short Name | `string` | n/a | yes |
-| <a name="input_region"></a> [region](#input\_region) | region | `string` | `"eu-central-1"` | no |
-| <a name="input_short_description"></a> [short\_description](#input\_short\_description) | The short description | `string` | `"main"` | no |
-| <a name="input_sslmode"></a> [sslmode](#input\_sslmode) | Establish the communication to the database on ssl | `string` | `"require"` | no |
 
-## Outputs
+### create-database
 
-No outputs.
+This sub-module is in charge to create : 
+
+* `postgresql database` : Patch BaseLine to apply to a specific operating system family. The approval rules defined into a patch baseline need to be setted when calling the module.
+
+
+* `postgresql role` : following best practices, we will create `role` in a first step. Those roles will handle grants (=permissions).
+
+
+* `postgresql grant` : the list of grants that will be associated to the role.
+
+Check the `simple-database` usecase to have a complete example.
+
+
+### create-users & Password Management
+
+This sub-module is in charge to create : 
+
+* `postgresql role` : a user is a role that inherits permissions from roles and have the option 'login' = true. A user can have an expiration date. It's a good practice to expire password for human users.
+
+* Regarding `password management` inside a terraform module, it could be complex to manage properly passwords inside a generic module. You can refer to this excellent post to manage securly your passwords : https://blog.gruntwork.io/a-comprehensive-guide-to-managing-secrets-in-your-terraform-code-1d586955ace1. A system of `postprocessing playbook` is available to set password securely.
+
+
+check the `create-users-on-existent-database` or `all-in-one` usecases to have complete examples.
+
+
+## Usecases
+
+|Example|UseCase|
+|-------|--------|
+|[simple-database](./example/simple-database/HOWTO.md)|Demonstration How to create Database, Roles, and Grants objects|
+|[create-users-on-existent-database](./example/create-users-on-existent-database/HOWTO.md)|From an existent database, you can create several users. This usecase use a trivial postprocessing playbook for example. **DO NOT USE THIS PLAYBOOK IN PRODUCTION, IT's NOT SAFE**|
+|[all-in-one](./example/all-in-one/HOWTO.md)|Demonstration How to create Database, Roles, Users in one phase. This usecase use a postprocessing playbook that generate passwords, set password for each users, and store the password in the parameterStore into an AWS Account.|
+|[full-rds-example](./example/full-rds-example/HOWTO.md)|Demonstration for other features covered by the module : Demonstrate an another postprocessing playbook that generate passwords into AWS SecretsManager, deploy the `pgaudit` extension for real-time monitoring, and deploy lambda to stream the audit logs.|
+
+
+### Prerequirements
+
+Those modules uses the excellent [postgresql provider](https://registry.terraform.io/providers/cyrilgdn/postgresql/latest/docs). for each usecase, you need to have : 
+
+* the network connectivity to your database (by example, if you launch your terraform scripts from a gitlab-ci runner, your runners must reach the database)
+* the credentials of a user with the required permissions to connect on a postgresql instance, to create database etc ... Often, we use postgres user for the postgresql provider, and a custom admin user for creating database and other objects. For the password, to avoid passing in clear text the password used by the postgresql provider, use the native postgresql mechanism by setting an environment variable **PGPASSWORD**.
+
+### Tests environment
+
+You can find a docker-compose file to start locally a postgresql (version 13.4) database and set the password for postgres user. Use the command **docker-compose -f docker-compose.yml up -d**.
+
+
+### :warning: Important note:
+
+We highly recommand you using **explicitly a version tag of this module** instead of branch reference since the latter is changing frequently. (use **ref=v1.0.0**,  don't use **ref=master**)    
+
+All the examples are available in `examples` subdirectory of this module.
+
+## Inputs & outputs
+
+you could find all Inputs & outputs of each submodule here :
+
+### create-database
+
+[docs](./create-database/README.md)
+
+### create-users
+
+[docs](./create-users/README.md)
+
+### lambda-stream-audit
+
+[docs](./lambda-stream-audit/README.md)
+

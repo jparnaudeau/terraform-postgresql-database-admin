@@ -13,7 +13,7 @@ No requirements.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_lambda"></a> [lambda](#module\_lambda) | git@gitlab.eulerhermes.io:cloud-devops/terraform-modules/lambda.git?ref=v3.6.2 |  |
+| <a name="module_lambda"></a> [lambda](#module\_lambda) | git@gitlab.eulerhermes.io:cloud-devops/terraform-modules/lambda.git | v3.6.2 |
 
 ## Resources
 

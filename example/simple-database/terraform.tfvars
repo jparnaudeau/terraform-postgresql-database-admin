@@ -1,37 +1,26 @@
 # provider connection infos
 pgadmin_user     = "postgres"
-dbhost           = "winhost"
+dbhost           = "localhost"
 expected_version = "12.0.0"
 sslmode          = "disable"
 
 inputs = {
 
-  # parameters used for creating database
+  # parameters used for creating a database named 'mydatabase' and for creating objects in the public schema
   db_schema_name = "public"
-  db_name        = "jerome"
-  db_admin       = "postgres"   #owner of the database
+  db_name        = "mydatabase"
+  db_admin       = "app_admin_role"   # owner of the database
   extensions     = []
  
-  #sslmode        = "require"
-
-  # https://aws.amazon.com/blogs/database/managing-postgresql-users-and-roles/
-  # The user 'db_admin', created by terraform during deployment, is the "super-administrator", equivalent to "root" user on linux machine.
-  # Security Best Practices recommends to NOT USE this user in your daily maintenance task or in your application. Instead, the good approach is : 
-  # 1) create Roles that are a set of permissions (= grant)
-  # 2) set grants on role 
-  # 3) create User (these users have username/password) that inherits their permissions to the role. You can retrieve the password from the parameterStore,
-
   # ---------------------------------- ROLES ------------------------------------------------------------------------------------
   # In this example, we create 3 roles
-  # - one "releng" (for reengineering) will be the role that you used for creation, deletion, grant operations on objects.
-  # - one "readonly" for readonly operations.
-  # - one "write" for write operations. If you have an application that insert lines into tables or objects, use this role. 
+  # - "app_admin_role" will be the role used for creation, deletion, grant operations on objects, especially for tables.
+  # - "app_write_role" for write operations. If you have a backend that insert lines into tables, it will used a user that inherits permissions from it.
+  # - "app_readonly_role" for readonly operations.
   # Note : "write" role does not have the permissions to create table.
-  # Note : the role app_releng_role is a best practice and is mandatory : KEEP IT !!   db = "jerome"
-  # Note : the privileges is applied on object_type = schema.
-  #         USAGE = GRANT USAGE ON SCHEMA public TO readonly;
+  # Note : the 'createrole' field is a boolean that provides a way to create other roles and put grants on it. Be carefull when you give this permission (privilege escalation).
   db_roles = [
-    { id = "releng", role = "app_releng_role", inherit = true, login = false, validity = "infinity", privileges = ["USAGE", "CREATE"], createrole = true },
+    { id = "admin", role = "app_admin_role", inherit = true, login = false, validity = "infinity", privileges = ["USAGE", "CREATE"], createrole = true },
     { id = "readonly", role = "app_readonly_role", inherit = true, login = false, validity = "infinity", privileges = ["USAGE"], createrole = false },
     { id = "write", role = "app_write_role", inherit = true, login = false, validity = "infinity", privileges = ["USAGE"], createrole = false },
 
@@ -46,25 +35,24 @@ inputs = {
   # you could find the available privileges on official postgresql doc : https://www.postgresql.org/docs/13/ddl-priv.html
   # Note object_type = "type" is used only for default privileges
   db_grants = [
-    # role app_releng_role : define grants to apply on db 'jerome', schema 'public'
-    { object_type = "database", privileges = ["CREATE", "CONNECT", "TEMPORARY"], role = "app_releng_role", owner_role = "postgres", grant_option = true },
-    { object_type = "type", privileges = ["USAGE"], role = "app_releng_role", owner_role = "postgres", grant_option = true },
+    # role app_admin_role : define grants to apply on db 'mydatabase', schema 'public'
+    { object_type = "database", privileges = ["CREATE", "CONNECT", "TEMPORARY"], role = "app_admin_role", owner_role = "postgres", grant_option = true },
+    { object_type = "type", privileges = ["USAGE"], role = "app_admin_role", owner_role = "postgres", grant_option = true },
 
-    # role app_readonly_role : define grant to apply on db 'jerome', schema 'public'  
-    { object_type = "database", privileges = ["CONNECT"], role = "app_readonly_role", owner_role = "app_releng_role", grant_option = false },
-    { object_type = "type", privileges = ["USAGE"], role = "app_readonly_role", owner_role = "app_releng_role", grant_option = true },
-    { object_type = "table", privileges = ["SELECT", "REFERENCES", "TRIGGER"], role = "app_readonly_role", owner_role = "app_releng_role", grant_option = false },
-    { object_type = "sequence", privileges = ["SELECT", "USAGE"], role = "app_readonly_role", owner_role = "app_releng_role", grant_option = false },
+    # role app_readonly_role : define grant to apply on db 'mydatabase', schema 'public'  
+    { object_type = "database", privileges = ["CONNECT"], role = "app_readonly_role", owner_role = "app_admin_role", grant_option = false },
+    { object_type = "type", privileges = ["USAGE"], role = "app_readonly_role", owner_role = "app_admin_role", grant_option = true },
+    { object_type = "table", privileges = ["SELECT", "REFERENCES", "TRIGGER"], role = "app_readonly_role", owner_role = "app_admin_role", grant_option = false },
+    { object_type = "sequence", privileges = ["SELECT", "USAGE"], role = "app_readonly_role", owner_role = "app_admin_role", grant_option = false },
 
-    # role app_write_role : define grant to apply on db 'jerome', schema 'public'
-    { object_type = "database", privileges = ["CONNECT"], role = "app_write_role", owner_role = "app_releng_role", grant_option = false },
-    { object_type = "type", privileges = ["USAGE"], role = "app_write_role", owner_role = "app_releng_role", grant_option = true },
-    { object_type = "table", privileges = ["SELECT", "REFERENCES", "TRIGGER", "INSERT", "UPDATE", "DELETE"], role = "app_write_role", owner_role = "app_releng_role", grant_option = false },
-    { object_type = "sequence", privileges = ["SELECT", "USAGE"], role = "app_write_role", owner_role = "app_releng_role", grant_option = false },
-    { object_type = "function", privileges = ["EXECUTE"], role = "app_write_role", owner_role = "app_releng_role", grant_option = false },
+    # role app_write_role : define grant to apply on db 'mydatabase', schema 'public'
+    { object_type = "database", privileges = ["CONNECT"], role = "app_write_role", owner_role = "app_admin_role", grant_option = false },
+    { object_type = "type", privileges = ["USAGE"], role = "app_write_role", owner_role = "app_admin_role", grant_option = true },
+    { object_type = "table", privileges = ["SELECT", "REFERENCES", "TRIGGER", "INSERT", "UPDATE", "DELETE"], role = "app_write_role", owner_role = "app_admin_role", grant_option = false },
+    { object_type = "sequence", privileges = ["SELECT", "USAGE"], role = "app_write_role", owner_role = "app_admin_role", grant_option = false },
+    { object_type = "function", privileges = ["EXECUTE"], role = "app_write_role", owner_role = "app_admin_role", grant_option = false },
 
   ],
 
 }
-
 
