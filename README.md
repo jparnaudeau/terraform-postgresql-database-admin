@@ -1,6 +1,6 @@
 # terraform-postgresql-database-admin
 
-Terraform is a great tool to automate "everything" in modern IT. However, there is one area in which there is little: the management of users and their permissions in a postgresql database. 
+Terraform is a great tool to automate "everything" in modern IT. Based on my own experience, i will propose you an abstraction for the management "inside a database" : the management of users and their permissions in a postgresql database. 
 
 This module provides a way to manage securly and properly, the objects, inside a postgresql database. Based on best practices, describe in this blog : 
 
