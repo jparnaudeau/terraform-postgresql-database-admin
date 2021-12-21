@@ -13,6 +13,22 @@ The module is divided into 2 sub-modules and several examples that illustrates d
 * The creation of the database with the roles and the permissions associated with (named grant inside postgresql).
 * The creation of the user. For security perspective, user inherits permissions from role. A user should have an expiration date for his password.
 
+The diagram below illustrate what we neeed to do : 
+
+![db-relations](schemas/Diagram-Relations.png)
+
+|Actor|Remarks|
+|------|------|
+|the user `postgres` or the super-user|This user should not be used in daily tasks. Instead, create an admin role on which you delegate high level permissions|
+|Application admin Role|This role will be the owner of the database and all objects inside the database. It can create database,tables inside database and roles. |
+|ReadOnly Role|the role with grants that allowing select on tables|
+|Write Role|the role with grants that allowing select/insert/update/delete on tables|
+|the user `application reporting`| This user is used inside the reporting application. |
+|the user `application backend`| This user is used inside the backend application. |
+
+Note : Roles are independent from the database and schema. But we advice to create the 3 roles (admin,readonly,write) for each database and do not shared roles accross databases. That why we prefixe the name of the role by `app`, a trigram that can easily differentiate role in real usecases. 
+Note : We create 3 roles (admin,write,readonly) but you can be more granular. By example, splitting the role write into several write roles, allowing the permissions insert/update/delete only on specific tables. the security pattern `Least privilege` can be applied at this level.
+
 
 ## Modules Description
 
@@ -21,7 +37,7 @@ The module is divided into 2 sub-modules and several examples that illustrates d
 
 This sub-module is in charge to create : 
 
-* `postgresql database` : Patch BaseLine to apply to a specific operating system family. The approval rules defined into a patch baseline need to be setted when calling the module.
+* `postgresql database` : In some case, you need to create the database first.
 
 
 * `postgresql role` : following best practices, we will create `role` in a first step. Those roles will handle grants (=permissions).
@@ -49,7 +65,7 @@ check the `create-users-on-existent-database` or `all-in-one` usecases to have c
 |Example|UseCase|
 |-------|--------|
 |[simple-database](./example/simple-database/HOWTO.md)|Demonstration How to create Database, Roles, and Grants objects|
-|[create-users-on-existent-database](./example/create-users-on-existent-database/HOWTO.md)|From an existent database, you can create several users. This usecase use a trivial postprocessing playbook for example. **DO NOT USE THIS PLAYBOOK IN PRODUCTION, IT's NOT SAFE**|
+|[create-users-on-existent-database](./example/create-users-on-existent-database/HOWTO.md)|From an existent database, you can create several users. This usecase use a trivial postprocessing playbook for example. **DO NOT USE THIS PLAYBOOK IN PRODUCTION, IT's NOT SAFE.**|
 |[all-in-one](./example/all-in-one/HOWTO.md)|Demonstration How to create Database, Roles, Users in one phase. This usecase use a postprocessing playbook that generate passwords, set password for each users, and store the password in the parameterStore into an AWS Account.|
 |[full-rds-example](./example/full-rds-example/HOWTO.md)|Demonstration for other features covered by the module : Demonstrate an another postprocessing playbook that generate passwords into AWS SecretsManager, deploy the `pgaudit` extension for real-time monitoring, and deploy lambda to stream the audit logs.|
 
@@ -63,14 +79,8 @@ Those modules uses the excellent [postgresql provider](https://registry.terrafor
 
 ### Tests environment
 
-You can find a docker-compose file to start locally a postgresql (version 13.4) database and set the password for postgres user. Use the command **docker-compose -f docker-compose.yml up -d**.
+You can find a docker-compose file to start locally a postgresql (version 13.4) database and set the password for postgres user. Use the command **docker-compose -f docker-compose.yml up -d**.  
 
-
-### :warning: Important note:
-
-We highly recommand you using **explicitly a version tag of this module** instead of branch reference since the latter is changing frequently. (use **ref=v1.0.0**,  don't use **ref=master**)    
-
-All the examples are available in `examples` subdirectory of this module.
 
 ## Inputs & outputs
 
@@ -88,3 +98,7 @@ you could find all Inputs & outputs of each submodule here :
 
 [docs](./lambda-stream-audit/README.md)
 
+
+### :warning: Important note:
+
+We highly recommand you using **explicitly a version tag of this module** instead of branch reference since the latter is changing frequently. (use **ref=v1.0.0**,  don't use **ref=master**) 

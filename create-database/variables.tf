@@ -25,6 +25,12 @@ variable "revoke_create_public" {
   default     = true
 }
 
+variable "create_database" {
+  type        = bool
+  description = "Enable/Disable the creation of the database. Except for local tests or Cloud environment, the database creation is not possible. Disabled by default"
+  default     = false
+}
+
 variable "inputs" {
   type = object({
     db_schema_name = string

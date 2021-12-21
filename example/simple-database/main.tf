@@ -13,6 +13,7 @@ module "initdb" {
   dbport       = var.dbport
 
   # input parameters for creating database & objects inside database
-  inputs = var.inputs
+  create_database = true
+  inputs          = var.inputs
 }
 

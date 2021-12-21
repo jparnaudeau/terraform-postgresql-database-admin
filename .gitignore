@@ -13,3 +13,5 @@
 .project
 
 *.zip
+
+**/*Zone.Identifier

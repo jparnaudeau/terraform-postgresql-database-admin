@@ -3,6 +3,8 @@
 # Database Creation
 ########################################
 resource "postgresql_database" "db" {
+  for_each = var.create_database ? toset([var.inputs["db_name"]]) : []
+  
   name              = var.inputs["db_name"]
   owner             = var.inputs["db_admin"]
   template          = "template0"
@@ -51,6 +53,7 @@ resource "postgresql_role" "app_roles" {
 # Schemas Creation & grant creation inside schema
 ########################################
 resource "postgresql_schema" "schema" {
+
   database      = var.inputs["db_name"]
   name          = var.inputs["db_schema_name"]
   owner         = var.inputs["db_admin"]
