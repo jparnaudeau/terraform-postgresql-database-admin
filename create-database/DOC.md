@@ -34,6 +34,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_create_database"></a> [create\_database](#input\_create\_database) | Enable/Disable the creation of the database. Except for local tests or Cloud environment, the database creation is not possible. Disabled by default | `bool` | `false` | no |
 | <a name="input_dbhost"></a> [dbhost](#input\_dbhost) | The Postgresql Database Hostname | `string` | n/a | yes |
 | <a name="input_dbport"></a> [dbport](#input\_dbport) | The Postgresql Database Port | `string` | n/a | yes |
 | <a name="input_inputs"></a> [inputs](#input\_inputs) | The Inputs parameters for objects to create inside the database | <pre>object({<br>    db_schema_name = string<br>    db_name        = string<br>    db_admin       = string<br>    #sslmode        = string<br>    extensions     = list(string)<br>    db_roles = list(object({<br>      id         = string<br>      role       = string<br>      inherit    = bool<br>      login      = bool<br>      validity   = string<br>      privileges = list(string)<br>      createrole = bool<br>    }))<br>    db_grants = list(object({<br>      object_type  = string<br>      privileges   = list(string)<br>      #schema       = string<br>      role         = string<br>      owner_role   = string<br>      grant_option = bool<br>    }))<br>  })</pre> | `null` | no |
