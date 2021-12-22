@@ -63,6 +63,11 @@ Working with a custom schema is available but keep in mind that :
 
 * you need to set the field **search_path** in each of the role. If you do not do that, you need to prefix each of your object with the name of the schema.
 
+## It's not a bug !
+
+If you create tables, apply this module by creating roles and permissions, with by example, the "write" permissions (insert/update/delete) on the tables, it works.
+
+After the apply, if you create a new table, and try to insert lines into this table, you will have an error `Permission Denied`. It's not a bug. Because, the permissions put in the previous step are not retro-active. You need to re-execute the terraform apply to propagate permisisons (the write permissions) on the new table. 
 
 ## Modules Description
 

@@ -15,3 +15,5 @@
 *.zip
 
 **/*Zone.Identifier
+
+gen-docs.sh

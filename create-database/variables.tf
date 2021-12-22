@@ -59,3 +59,9 @@ variable "inputs" {
   description = "The Inputs parameters for objects to create inside the database"
   default     = null
 }
+
+variable "default_superusers_list" {
+  type        = list(string)
+  description = "List the super-users. By default, it's the postgres user."
+  default     = ["postgres"]
+}

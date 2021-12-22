@@ -15,15 +15,34 @@ resource "postgresql_database" "db" {
   allow_connections = true
 
   depends_on = [
-    postgresql_role.app_roles,
+    postgresql_role.app_role_admin,
   ]
 }
 
 ########################################
 # Roles Creation
 ########################################
+# the adminsitration role
+resource "postgresql_role" "app_role_admin" {
+  # because there is a dependency between the admin role used to be the owner of the objects (var.inputs["db_admin"]) and the database and the other roles,
+  # we need to create this role first. Except when the role is a user that already exists, like when var.inputs["db_admin"] == 'postgres" by example.
+  for_each = { for tuple in var.inputs["db_roles"] : tuple.role => tuple if tuple.role == var.inputs["db_admin"] && ! contains(var.default_superusers_list,var.inputs["db_admin"]) }
+
+
+  name        = each.value.role
+  login       = each.value.login
+  inherit     = each.value.inherit
+  valid_until = each.value.validity
+  create_role = lookup(each.value, "createrole", false)
+  roles       = lookup(each.value, "membership", null)
+  search_path = lookup(each.value, "search_path", null)
+}
+
+# other roles
 resource "postgresql_role" "app_roles" {
-  for_each = { for tuple in var.inputs["db_roles"] : tuple.role => tuple }
+  # because there is a dependency between the admin role used to be the owner of the objects (var.inputs["db_admin"]) and the database and the other roles,
+  # we need to create other roles in a second step, after the creation of the var.inputs["db_admin"]
+  for_each = { for tuple in var.inputs["db_roles"] : tuple.role => tuple if tuple.role != var.inputs["db_admin"] }
 
   name        = each.value.role
   login       = each.value.login
@@ -47,6 +66,11 @@ resource "postgresql_role" "app_roles" {
       psql -c "GRANT ${each.value.role} TO ${var.inputs["db_admin"]};"
     EOT
   }
+
+  depends_on = [
+    postgresql_database.db,
+    postgresql_role.app_role_admin,
+  ]
 }
 
 ########################################
@@ -127,7 +151,6 @@ resource "postgresql_default_privileges" "alter_defaults_privs" {
   privileges  = each.value.privileges
 
   depends_on = [
-    #postgresql_role.app_users,
     postgresql_grant.privileges,
     postgresql_role.app_roles,
     postgresql_schema.schema,
