@@ -113,6 +113,13 @@ module "fake_user_password" {
 
 ```
 
+Notes : 
+
+* here, we use an another submodule `ssm-parameter` that creates parameter in the parameterStore. Don't forget to set yours AWS Credentials by setting the variable **AWS_PROFILE**.
+* for each user, we create 2 parameters in the parameterStore : <namespace>/<username>_user and <namespace>/<username>_password
+* by creating the parameters before the postprocessing playbook, it simplifies the shell executed by the playbook.
+
+
 ## call the module to create the users and use the postprocessing playbook to store passwords in parameterStore.
 
 ```hcl
@@ -160,6 +167,8 @@ module "create_users" {
 }
 
 ```
+
+Note : note the "depends_on" on this module : the initialization of the database need to be done before creating users.
 
 
 ## Define the inputs
@@ -281,4 +290,7 @@ exit 0
 
 ```
 
-By using a direct call on the api aws ssm put-parameter (and not using the terraform resource), we assure that the password is not stored into clear text in the tfstate.
+Notes : 
+
+* By using a direct call on the api aws ssm put-parameter (and not using the terraform resource), we assure that the password is not stored into clear text in the tfstate.
+* note the use of the variable `REGION`, setted in the map extra_envs in the main.tf.
