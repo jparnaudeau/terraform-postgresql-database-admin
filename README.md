@@ -86,7 +86,7 @@ This sub-module is in charge to create :
 
 This module uses a terraform object structure : Check the `simple-database` usecase to have a complete example.
 
-you could find all Inputs & outputs of this submodule here : [docs](./create-database/DOC.md)
+you could find all Inputs & outputs of this submodule here : [docs](./create-database/README.md)
 
 
 ### create-users & Password Management
@@ -101,14 +101,7 @@ This sub-module is in charge to create :
 
 check the `create-users-on-existent-database` or `all-in-one` usecases to have complete examples.
 
-you could find all Inputs & outputs of this submodule here : [docs](./create-users/DOC.md)
-
-
-### lambda-stream-audit
-
-TO COMPLETE
-
-[docs](./lambda-stream-audit/DOC.md)
+you could find all Inputs & outputs of this submodule here : [docs](./create-users/README.md)
 
 
 ## Usecases
