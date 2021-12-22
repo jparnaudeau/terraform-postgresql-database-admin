@@ -15,6 +15,15 @@ The module is divided into 2 sub-modules and several examples that illustrates d
 * The creation of the database with the roles and the permissions associated with (named grant inside postgresql).
 * The creation of the user. For security perspectives, user inherits permissions from role. A user should have an expiration date for his password.
 
+## Usecases
+
+|Example|UseCase|
+|-------|--------|
+|[simple-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/simple-database/README.md)|Demonstration How to create Database, Roles, and Grants objects.|
+|[create-users-on-existent-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/create-users-on-existent-database/README.md)|From an existent database, you can create several users. This usecase use a trivial postprocessing playbook for example. **DO NOT USE THIS PLAYBOOK IN PRODUCTION, IT's NOT SAFE.**|
+|[all-in-one](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/all-in-one/README.md)|Demonstration How to create Database, Roles, Users in one phase. This usecase use a postprocessing playbook that generate passwords, set password for each users, and store the password in the parameterStore into an AWS Account.|
+|[full-rds-example](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/full-rds-example/README.md)|Demonstration for other features covered by the module : Demonstrate an another postprocessing playbook that generate passwords into AWS SecretsManager, deploy the `pgaudit` extension for real-time monitoring, and deploy lambda to stream the audit logs. Coming in a future release.|
+
 ## Diagram
 
 The diagram below illustrate what we neeed to do : 
@@ -104,15 +113,6 @@ check the [create-users-on-existent-database](https://github.com/jparnaudeau/ter
 you could find all Inputs & outputs of this submodule here : [docs](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/create-users/README.md)
 
 
-## Usecases
-
-|Example|UseCase|
-|-------|--------|
-|[simple-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/simple-database/README.md)|Demonstration How to create Database, Roles, and Grants objects.|
-|[create-users-on-existent-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/create-users-on-existent-database/README.md)|From an existent database, you can create several users. This usecase use a trivial postprocessing playbook for example. **DO NOT USE THIS PLAYBOOK IN PRODUCTION, IT's NOT SAFE.**|
-|[all-in-one](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/all-in-one/README.md)|Demonstration How to create Database, Roles, Users in one phase. This usecase use a postprocessing playbook that generate passwords, set password for each users, and store the password in the parameterStore into an AWS Account.|
-|[full-rds-example](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/full-rds-example/README.md)|Demonstration for other features covered by the module : Demonstrate an another postprocessing playbook that generate passwords into AWS SecretsManager, deploy the `pgaudit` extension for real-time monitoring, and deploy lambda to stream the audit logs. Coming in a future release.|
-
 
 ### Prerequirements
 
@@ -126,12 +126,3 @@ Those modules uses the excellent [postgresql provider](https://registry.terrafor
 You can find a docker-compose file to start locally a postgresql (version 13.4) database and set the password for postgres user. Use the command `docker-compose -f docker-compose.yml up -d`.  
 
 
-## Inputs & outputs
-
-
-
-### create-database
-
-
-
-### create-users
