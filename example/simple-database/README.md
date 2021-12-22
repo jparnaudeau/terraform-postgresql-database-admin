@@ -64,6 +64,10 @@ module "initdb" {
 
 ```
 
+### :warning: Important note:
+
+We highly recommand you using **explicitly a version tag of this module** instead of branch reference since the latter is changing frequently. (use **ref=v1.0.0**,  don't use **ref=master**) 
+
 
 ## Define the inputs
 
@@ -124,8 +128,3 @@ inputs = {
 }
 
 ```
-
-
-### :warning: Important note:
-
-We highly recommand you using **explicitly a version tag of this module** instead of branch reference since the latter is changing frequently. (use **ref=v1.0.0**,  don't use **ref=master**) 
