@@ -116,7 +116,7 @@ module "fake_user_password" {
 Notes : 
 
 * here, we use an another submodule `ssm-parameter` that creates parameter in the parameterStore. Don't forget to set yours AWS Credentials by setting the variable **AWS_PROFILE**.
-* for each user, we create 2 parameters in the parameterStore : <namespace>/<username>_user and <namespace>/<username>_password
+* for each user, we create 2 parameters in the parameterStore : `<namespace>/<username>_user` and `<namespace>/<username>_password`
 * by creating the parameters before the postprocessing playbook, it simplifies the shell executed by the playbook.
 
 
@@ -295,13 +295,11 @@ Notes :
 * By using a direct call on the api aws ssm put-parameter (and not using the terraform resource), we assure that the password is not stored into clear text in the tfstate.
 * note the use of the variable `REGION`, setted in the map extra_envs in the main.tf.
 
-## don't be surprised
+## To summarize
+
+launch `terraform apply --auto-approve`
 
 ```
-
-launch terraform apply --auto-approve
-
-...
 
 Outputs:
 
@@ -315,17 +313,17 @@ created_roles = [
 ]
 db_users = {
   "admin" = {
-    "connect_command" = "psql -h localhost -p 5432 -U admin -d mydatabase"
+    "connect_command" = "psql -h localhost -p 5432 -U admin -d mydatabase -W"
     "parameter_store_user" = "test/mydatabase/rds/admin_user"
     "parameter_store_user_password" = "test/mydatabase/rds/admin_password"
   }
   "backend" = {
-    "connect_command" = "psql -h localhost -p 5432 -U backend -d mydatabase"
+    "connect_command" = "psql -h localhost -p 5432 -U backend -d mydatabase -W"
     "parameter_store_user" = "test/mydatabase/rds/backend_user"
     "parameter_store_user_password" = "test/mydatabase/rds/backend_password"
   }
   "readonly" = {
-    "connect_command" = "psql -h localhost -p 5432 -U readonly -d mydatabase"
+    "connect_command" = "psql -h localhost -p 5432 -U readonly -d mydatabase -W"
     "parameter_store_user" = "test/mydatabase/rds/readonly_user"
     "parameter_store_user_password" = "test/mydatabase/rds/readonly_password"
   }
@@ -374,8 +372,9 @@ ERROR:  permission denied for table table1
 
 ```
 
-It's normal, we need to re-execute the terraform apply to propage permissions on this new table
-be carefull to pass the refresh_passwords to [""] if you don't want regenerate new password.
+* It's normal, we need to re-execute the terraform apply to propage permissions on this new table
+* be carefull to pass the refresh_passwords to [""] if you don't want regenerate new password.
+
 
 ```
 
@@ -394,5 +393,28 @@ Type "help" for help.
 
 mydatabase=> insert into table1 values ('first line');
 INSERT 0 1
+
+```
+
+Test the permissions for readonly user : 
+
+```
+
+psql -h localhost -p 5432 -U readonly -d mydatabase -W
+Password: <find password in parameterStore at test/mydatabase/rds/readonly_password>
+psql (12.8 (Ubuntu 12.8-0ubuntu0.20.04.1), server 13.4 (Debian 13.4-4.pgdg110+1))
+WARNING: psql major version 12, server major version 13.
+         Some psql features might not work.
+Type "help" for help.
+
+mydatabase=> select * from table1;
+    col1
+------------
+ first line
+(1 row)
+
+mydatabase=> create table table2(col1 TEXT);
+ERROR:  permission denied for schema public
+LINE 1: create table table2(col1 TEXT);
 
 ```
