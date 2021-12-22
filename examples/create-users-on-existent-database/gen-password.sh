@@ -4,7 +4,6 @@
 if [ "${REFRESH_PASSWORD}" == "true" ]
 then
 
-    echo $REFRESH_PASSWORD
     # generate a random password
     USERPWD=$(openssl rand -base64 16 |tr -d '[;+%$!/]');
 

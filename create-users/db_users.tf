@@ -46,7 +46,7 @@ resource "null_resource" "pgusers_postprocessing_playbook" {
       PGUSER           = var.pgadmin_user
       PGDATABASE       = var.postprocessing_playbook_params["db_name"]
       SHELL_TO_EXECUTE = var.postprocessing_playbook_params["shell_name"]
-      REFRESH_PASSWORD = contains(var.postprocessing_playbook_params["refresh_passwords"],each.key)
+      REFRESH_PASSWORD = contains(var.postprocessing_playbook_params["refresh_passwords"],each.key) || try(var.postprocessing_playbook_params["refresh_passwords"][0],"") == "all" 
     },
       var.postprocessing_playbook_params["extra_envs"]
     )

@@ -3,12 +3,6 @@ pgadmin_user     = "postgres"
 dbhost           = "localhost"
 sslmode          = "disable"
 
-# set tags
-tags = {
-  environment = "test"
-  createdBy   = "terraform"
-}
-
 # for post processing
 postprocessing_playbook_params = {
   enable = true
@@ -16,7 +10,7 @@ postprocessing_playbook_params = {
   extra_envs = {
     REGION="paris"
   }
-  refresh_passwords = []
+  refresh_passwords = ["all"]
   shell_name = "./gen-password.sh"
 }
 

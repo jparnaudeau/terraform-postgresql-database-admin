@@ -45,18 +45,6 @@ variable "inputs" {
   default     = null
 }
 
-variable "recovery_window_in_days" {
-  description = "The number in days to specify, for SecretsManager, for the recovery windows"
-  type        = number
-  default     = 0
-}
-
-variable "tags" {
-  type        = map(string)
-  description = "a map of string used to tag entries in AWS Secrets Manager"
-  default     = {}
-}
-
 variable "postprocessing_playbook_params" {
   description = "params for postprocessing playbook"
   type = any

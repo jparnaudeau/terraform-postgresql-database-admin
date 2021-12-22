@@ -1,49 +1,181 @@
-## Requirements
+# create-users-on-existent-database
 
-| Name | Version |
-|------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.12 |
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 0.13 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 2.70, < 4 |
-| <a name="requirement_null"></a> [null](#requirement\_null) | ~> 3.0.0 |
-| <a name="requirement_postgresql"></a> [postgresql](#requirement\_postgresql) | ~> 1.11.0 |
-| <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.0.0 |
+This example shows you how to create users after a clean initialisation of a database i.e, with roles created in the example [simple-database](../simple-database).
 
-## Providers
+You can find a complete example for creating database, roles and users in the example [all-in-one](../all-in-one).
 
-| Name | Version |
-|------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 2.70, < 4 |
+This example provide a first illustration to "How to set password" with the postprocessing playbook.
 
-## Modules
+## Prepare you postgresql provider
 
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_initdb"></a> [initdb](#module\_initdb) | ../create-users |  |
+```hcl
 
-## Resources
+#######################################
+# Define Providers pgadm & pgmgm for postgresql
+#######################################
+provider "postgresql" {
+  alias            = "pgadm"
+  host             = var.dbhost
+  port             = var.dbport
+  username         = var.pgadmin_user
+  sslmode          = var.sslmode
+  connect_timeout  = var.connect_timeout
+  superuser        = var.superuser
+  expected_version = var.expected_version
+}
 
-| Name | Type |
-|------|------|
-| [aws_db_instance.postgres](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/db_instance) | data source |
+provider "postgresql" {
+  alias            = "pgmgm"
+  host             = var.dbhost
+  port             = var.dbport
+  database         = var.inputs["db_name"]
+  username         = var.pgadmin_user
+  sslmode          = var.sslmode
+  connect_timeout  = var.connect_timeout
+  superuser        = var.superuser
+  expected_version = var.expected_version
+}
 
-## Inputs
+```
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_costcenter"></a> [costcenter](#input\_costcenter) | CostCenter | `string` | n/a | yes |
-| <a name="input_data_service"></a> [data\_service](#input\_data\_service) | a constant string used in building parameterStore path | `string` | `"rds"` | no |
-| <a name="input_dbhost"></a> [dbhost](#input\_dbhost) | The Host of the RDS Instance. If empty, retrieve the amazon endpoint of the RDS Instance. | `string` | `""` | no |
-| <a name="input_dbid"></a> [dbid](#input\_dbid) | The Id of the RDS Instance | `string` | n/a | yes |
-| <a name="input_environment"></a> [environment](#input\_environment) | Envrionment name. Ie: dev, sandbox, ... | `string` | n/a | yes |
-| <a name="input_inputs"></a> [inputs](#input\_inputs) | The map containing all elements for creating objects inside database | <pre>object({<br>    db_schema_name = string<br>    db_name        = string<br>    db_admin       = string<br>    db_roles = list(object({<br>      id         = string<br>      role       = string<br>      inherit    = bool<br>      login      = bool<br>      validity   = string<br>      db         = string<br>      privileges = list(string)<br>      createrole = bool<br>    }))<br>    db_grants = list(object({<br>      object_type  = string<br>      privileges   = list(string)<br>      schema       = string<br>      db           = string<br>      role         = string<br>      owner_role   = string<br>      grant_option = bool<br>    }))<br>    db_users = list(object({<br>      name             = string<br>      inherit          = bool<br>      login            = bool<br>      membership       = list(string)<br>      validity         = string<br>      connection_limit = number<br>      createrole       = bool<br>    }))<br>  })</pre> | `null` | no |
-| <a name="input_owner"></a> [owner](#input\_owner) | Email of the team owning application | `string` | n/a | yes |
-| <a name="input_pgadmin_user"></a> [pgadmin\_user](#input\_pgadmin\_user) | The RDS user to used for creating/managing other user in the database. If empty, retrieve the master user of the RDS Instance | `string` | `""` | no |
-| <a name="input_product_name"></a> [product\_name](#input\_product\_name) | Application Short Name | `string` | n/a | yes |
-| <a name="input_region"></a> [region](#input\_region) | region | `string` | `"eu-central-1"` | no |
-| <a name="input_short_description"></a> [short\_description](#input\_short\_description) | The short description | `string` | `"main"` | no |
-| <a name="input_sslmode"></a> [sslmode](#input\_sslmode) | Establish the communication to the database on ssl | `string` | `"require"` | no |
+Note : the password of the `var.pgadmin_user` are stored in the environment variable **PGPASSWORD** that you must setted before the terraform apply.
 
-## Outputs
+## Call the module
 
-No outputs.
+```hcl
+
+#######################################
+# Create Random Passwords for each user
+#######################################
+resource "random_password" "passwords" {
+  for_each = { for user in var.inputs["db_users"] : user.name => user }
+
+  length           = 16
+  special          = true
+  upper            = true
+  lower            = true
+  min_upper        = 1
+  number           = true
+  min_numeric      = 1
+  min_special      = 3
+  override_special = "@#%&?"
+}
+
+
+#########################################
+# Create the users inside the database
+#########################################
+module "create_users" {
+
+  source = "../../create-users"
+
+  # set the provider
+  providers = {
+    postgresql = postgresql.pgadm
+  }
+
+  # targetted rds
+  pgadmin_user = var.pgadmin_user
+  dbhost       = var.dbhost
+  dbport       = var.dbport
+
+  # input parameters for creating users inside database
+  db_users = var.inputs["db_users"]
+
+  # set passwords
+  passwords = { for user in var.inputs["db_users"] : user.name => random_password.passwords[user.name].result }
+
+  # set postprocessing playbook
+  postprocessing_playbook_params = var.postprocessing_playbook_params
+
+}
+
+
+```
+
+Note : we use terraform resource `random_password` to initialize passwords, but the real passwords are setted by the postprocessing playbook. So even if the value of random_password are in clear text in the tfstate, the real passwords are not stored in the tfstate. 
+
+### :warning: Important note:
+
+We highly recommand you using **explicitly a version tag of this module** instead of branch reference since the latter is changing frequently. (use **ref=v1.0.0**,  don't use **ref=master**) 
+
+
+## Define the inputs
+
+in the `terraform.tfvars`, you could find : 
+
+```hcl
+
+inputs = {
+
+  # ---------------------------------- USER  ------------------------------------------------------------------------------------
+  # finally, we create : 
+  # - a human user with the readonly permission and an expiration date (for troubelshooting by example)
+  # - a user for a reporting application that requires only readonly permissions
+  # - a user for a backend application that requires write permissions
+  # 
+  # Regarding passwords, it's the shell "gen-password.sh" executed in the postprocessing playbook that in charge to set password for each user.
+  db_users = [
+    { name = "audejavel", inherit = true, login = true, membership = ["app_readonly_role"], validity = "2022-12-31 00:00:00+00", connection_limit = -1, createrole = false },
+    { name = "reporting", inherit = true, login = true, membership = ["app_readonly_role"], validity = "infinity", connection_limit = -1, createrole = false },
+    { name = "backend", inherit = true, login = true, membership = ["app_write_role"], validity = "infinity", connection_limit = -1, createrole = false },
+  ]
+
+}
+
+```
+
+# Define the passwords with the postprocessing playbook
+
+in the `terraform.tfvars`, you could find : 
+
+```hcl
+
+# for post processing
+postprocessing_playbook_params = {
+  enable = true
+  db_name = "mydatabase"
+  extra_envs = {
+    REGION="paris"
+  }
+  refresh_passwords = ["all"]
+  shell_name = "./gen-password.sh"
+}
+
+```
+
+The different parameters available in the object `postprocessing_playbook_params` are : 
+
+* enable : you need to enable the postprocessing playbook execution. If by example, you prepare passwords in a secure way, by example in an ecrypted file, you can use a terraform datasource to read this file (see this [post](https://blog.gruntwork.io/a-comprehensive-guide-to-managing-secrets-in-your-terraform-code-1d586955ace1) ), you can pass directly the passwords into the module without the need to execute the postprocessing playbook. Otherwise, enable it.
+* db_name : set the name of the database in which the users are related.
+* extra_envs : you can pass extra environment variables that are available inside your script.
+* refresh_passwords : you can force the execution of the postprocessing playbook for particular passwords. Just set in this field, the list of users for which you want a new password. In this case, a variable **REFRESH_PASSWORD** will be setted to `true`. Keep `all` if you want systematically regenerate new password for each user.
+* shell_name : it's your responsabilities to write a shell that generate passwords, update the user in the postgresql database, and store it in a safe place.
+
+
+# a dummy script used by the postprocessing playbook
+
+```
+
+#!/bin/bash
+
+
+if [ "${REFRESH_PASSWORD}" == "true" ]
+then
+
+    # generate a random password
+    USERPWD=$(openssl rand -base64 16 |tr -d '[;+%$!/]');
+
+    # Alter user inside postgresql database
+    psql -c "ALTER USER $DBUSER WITH PASSWORD '$USERPWD'";
+
+    # Alter Secret Storage
+    echo "{password: $USERPWD}" > ./$DBUSER.json 
+
+fi
+
+exit 0
+
+```
+
+As you can see, we generate a random password and store the password in a file !! DO NOT DO THIS IN PRODUCTION !!. You can find a real secure script in the [all-in-one](../all-in-one) example.

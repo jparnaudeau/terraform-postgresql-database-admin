@@ -43,27 +43,6 @@ variable "db_users" {
   default     = null
 }
 
-/*
-
-variable "db_users" {
-  type = object({
-    #db_name         = string
-    db_users = list(object({
-      name             = string
-      inherit          = bool
-      login            = bool
-      membership       = list(string)
-      validity         = string
-      connection_limit = number
-      createrole       = bool
-    }))
-  })
-  description = "The Inputs parameters for objects to create inside the database"
-  default     = null
-}
-*/
-
-
 
 ########################################
 # params used inside postprocessing playbook.

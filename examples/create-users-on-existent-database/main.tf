@@ -15,29 +15,6 @@ resource "random_password" "passwords" {
   override_special = "@#%&?"
 }
 
-#########################################
-# Store key/value username/password in AWS SecretManagers
-#########################################
-module "secrets-manager" {
-  for_each = { for user in var.inputs["db_users"] : user.name => user }
-  source  = "lgallard/secrets-manager/aws"
-  version = "0.5.1"
-
-  secrets = {
-    "secret-kv-${each.key}" = {
-      description = format("Secret access from username %s",each.key)
-      secret_key_value = {
-        username = each.key
-        password = random_password.passwords[each.key].result
-      }
-      recovery_window_in_days = var.recovery_window_in_days
-    },
-  }
-
-  tags = var.tags
-}
-
-
 
 #########################################
 # Create the users inside the database
