@@ -37,7 +37,7 @@ provider "postgresql" {
 
 ```
 
-Note : the password of the `var.pgadmin_user` are stored in the environment variable **PGPASSWORD** that you must setted before the terraform apply. 
+Note : the password of the `var.pgadmin_user` are stored in the environment variable **PGPASSWORD** that you must setted before the terraform plan or apply. 
 
 ## Call the module
 

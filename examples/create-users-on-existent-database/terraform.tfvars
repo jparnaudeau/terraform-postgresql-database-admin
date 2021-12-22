@@ -24,7 +24,7 @@ inputs = {
   # 
   # Regarding passwords, it's the shell "gen-password.sh" executed in the postprocessing playbook that in charge to set password for each user.
   db_users = [
-    { name = "audejavel", inherit = true, login = true, membership = ["app_readonly_role"], validity = "2022-12-31 00:00:00+00", connection_limit = -1, createrole = false },
+    { name = "audejavel", inherit = true, login = true, membership = ["app_readonly_role"], validity = "2021-12-31 00:00:00+00", connection_limit = -1, createrole = false },
     { name = "reporting", inherit = true, login = true, membership = ["app_readonly_role"], validity = "infinity", connection_limit = -1, createrole = false },
     { name = "backend", inherit = true, login = true, membership = ["app_write_role"], validity = "infinity", connection_limit = -1, createrole = false },
   ]

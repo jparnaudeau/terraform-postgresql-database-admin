@@ -38,7 +38,7 @@ provider "postgresql" {
 
 ```
 
-Note : the password of the `var.pgadmin_user` are stored in the environment variable **PGPASSWORD** that you must setted before the terraform apply.
+Note : the password of the `var.pgadmin_user` are stored in the environment variable **PGPASSWORD** that you must setted before the terraform plan or apply.
 
 ## Call the module
 
@@ -67,7 +67,7 @@ resource "random_password" "passwords" {
 #########################################
 module "create_users" {
 
-  source = "../../create-users"
+  source = "git::https://github.com/jparnaudeau/terraform-postgresql-database-admin.git//create-users?ref=master"
 
   # set the provider
   providers = {
@@ -146,14 +146,16 @@ postprocessing_playbook_params = {
 
 The different parameters available in the object `postprocessing_playbook_params` are : 
 
-* enable : you need to enable the postprocessing playbook execution. If by example, you prepare passwords in a secure way, by example in an ecrypted file, you can use a terraform datasource to read this file (see this [post](https://blog.gruntwork.io/a-comprehensive-guide-to-managing-secrets-in-your-terraform-code-1d586955ace1) ), you can pass directly the passwords into the module without the need to execute the postprocessing playbook. Otherwise, enable it.
-* db_name : set the name of the database in which the users are related.
-* extra_envs : you can pass extra environment variables that are available inside your script.
-* refresh_passwords : you can force the execution of the postprocessing playbook for particular passwords. Just set in this field, the list of users for which you want a new password. In this case, a variable **REFRESH_PASSWORD** will be setted to `true`. Keep `all` if you want systematically regenerate new password for each user.
-* shell_name : it's your responsabilities to write a shell that generate passwords, update the user in the postgresql database, and store it in a safe place.
+* **enable** : you need to enable the postprocessing playbook execution. If by example, you prepare passwords in a secure way, by example in an ecrypted file, you can use a terraform datasource to read this file (see this [post](https://blog.gruntwork.io/a-comprehensive-guide-to-managing-secrets-in-your-terraform-code-1d586955ace1) ), you can pass directly the passwords into the module without the need to execute the postprocessing playbook. Otherwise, enable it.
+* **db_name** : set the name of the database in which the users are related.
+* **extra_envs** : you can pass extra environment variables that are available inside your script.
+* **refresh_passwords** : you can force the execution of the postprocessing playbook for particular passwords. Just set in this field, the list of users for which you want a new password. In this case, a variable **REFRESH_PASSWORD** will be setted to `true`. Keep `all` if you want systematically regenerate new password for each user.
+* **shell_name** : it's your responsabilities to write a shell that generate passwords, update the user in the postgresql database, and store it in a safe place.
 
 
 # a dummy script used by the postprocessing playbook
+
+The postprocessing playbook put the native postgresql environment variables : DBUSER, PGHOST, PGPORT, PGUSER, PGDATABASE. So you can use it inside your shell.
 
 ```
 
