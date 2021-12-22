@@ -40,7 +40,7 @@ variable "expected_version" {
 }
 
 variable "inputs" {
-  type = any
+  type        = any
   description = "The map containing all elements for creating objects inside database"
   default     = null
 }

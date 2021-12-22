@@ -40,13 +40,13 @@ variable "expected_version" {
 }
 
 variable "inputs" {
-  type = any
+  type        = any
   description = "The map containing all elements for creating objects inside database"
   default     = null
 }
 
 variable "postprocessing_playbook_params" {
   description = "params for postprocessing playbook"
-  type = any
-  default = null
+  type        = any
+  default     = null
 }

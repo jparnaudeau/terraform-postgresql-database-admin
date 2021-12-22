@@ -294,3 +294,105 @@ Notes :
 
 * By using a direct call on the api aws ssm put-parameter (and not using the terraform resource), we assure that the password is not stored into clear text in the tfstate.
 * note the use of the variable `REGION`, setted in the map extra_envs in the main.tf.
+
+## don't be surprised
+
+```
+
+launch terraform apply --auto-approve
+
+...
+
+Outputs:
+
+affected_schema = "public"
+connect_string = "psql -h localhost -p 5432 -U app_admin_role -d mydatabase"
+created_database = "mydatabase"
+created_roles = [
+  "app_admin_role",
+  "app_readonly_role",
+  "app_write_role",
+]
+db_users = {
+  "admin" = {
+    "connect_command" = "psql -h localhost -p 5432 -U admin -d mydatabase"
+    "parameter_store_user" = "test/mydatabase/rds/admin_user"
+    "parameter_store_user_password" = "test/mydatabase/rds/admin_password"
+  }
+  "backend" = {
+    "connect_command" = "psql -h localhost -p 5432 -U backend -d mydatabase"
+    "parameter_store_user" = "test/mydatabase/rds/backend_user"
+    "parameter_store_user_password" = "test/mydatabase/rds/backend_password"
+  }
+  "readonly" = {
+    "connect_command" = "psql -h localhost -p 5432 -U readonly -d mydatabase"
+    "parameter_store_user" = "test/mydatabase/rds/readonly_user"
+    "parameter_store_user_password" = "test/mydatabase/rds/readonly_password"
+  }
+}
+
+```
+
+
+Connect with the admin user to create table
+
+```
+
+psql -h localhost -p 5432 -U admin -d mydatabase -W
+Password: <find password in parameterStore at test/mydatabase/rds/admin_password>
+
+psql (12.8 (Ubuntu 12.8-0ubuntu0.20.04.1), server 13.4 (Debian 13.4-4.pgdg110+1))
+WARNING: psql major version 12, server major version 13.
+         Some psql features might not work.
+Type "help" for help.
+
+mydatabase=> create table table1(col1 TEXT);
+CREATE TABLE
+mydatabase=> \q
+
+```
+
+Connect with the backend user to insert line into this table
+
+```
+
+psql -h localhost -p 5432 -U backend -d mydatabase -W
+Password: <find password in parameterStore at test/mydatabase/rds/backend_password>
+
+psql (12.8 (Ubuntu 12.8-0ubuntu0.20.04.1), server 13.4 (Debian 13.4-4.pgdg110+1))
+WARNING: psql major version 12, server major version 13.
+         Some psql features might not work.
+Type "help" for help.
+
+psql (12.8 (Ubuntu 12.8-0ubuntu0.20.04.1), server 13.4 (Debian 13.4-4.pgdg110+1))
+WARNING: psql major version 12, server major version 13.
+         Some psql features might not work.
+Type "help" for help.
+
+mydatabase=> insert into table1 values ('first line');
+ERROR:  permission denied for table table1
+
+```
+
+It's normal, we need to re-execute the terraform apply to propage permissions on this new table
+be carefull to pass the refresh_passwords to [""] if you don't want regenerate new password.
+
+```
+
+terraform apply --auto-approve
+
+...
+
+# Test with backend user
+psql -h localhost -p 5432 -U backend -d mydatabase -W
+
+Password:
+psql (12.8 (Ubuntu 12.8-0ubuntu0.20.04.1), server 13.4 (Debian 13.4-4.pgdg110+1))
+WARNING: psql major version 12, server major version 13.
+         Some psql features might not work.
+Type "help" for help.
+
+mydatabase=> insert into table1 values ('first line');
+INSERT 0 1
+
+```

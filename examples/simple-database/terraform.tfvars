@@ -9,9 +9,9 @@ inputs = {
   # parameters used for creating a database named 'mydatabase' and for creating objects in the public schema
   db_schema_name = "public"
   db_name        = "mydatabase"
-  db_admin       = "app_admin_role"   # owner of the database
+  db_admin       = "app_admin_role" # owner of the database
   extensions     = []
- 
+
   # ---------------------------------- ROLES ------------------------------------------------------------------------------------
   # In this example, we create 3 roles
   # - "app_admin_role" will be the role used for creation, deletion, grant operations on objects, especially for tables.

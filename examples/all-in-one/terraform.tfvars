@@ -10,11 +10,11 @@ inputs = {
   # parameters used for creating database
   db_schema_name = "public"
   db_name        = "mydatabase"
-  db_admin       = "app_admin_role"   #owner of the database
+  db_admin       = "app_admin_role" #owner of the database
 
   # install extensions if needed
-  extensions     = []
- 
+  extensions = []
+
   # https://aws.amazon.com/blogs/database/managing-postgresql-users-and-roles/
   # 1) create Roles that are a set of permissions (named grant inside postgresql)
   # 2) set grants on role 
@@ -73,6 +73,6 @@ inputs = {
 # set tags & environment
 environment = "test"
 tags = {
-  createdBy   = "terraform"
+  createdBy = "terraform"
 }
 

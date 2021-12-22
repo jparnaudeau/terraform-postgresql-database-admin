@@ -5,7 +5,7 @@ variable "parameters" {
 }
 
 variable "namespace" {
-  type        = string 
+  type        = string
   description = "Prefix prepended to parameter name if not using default"
 }
 

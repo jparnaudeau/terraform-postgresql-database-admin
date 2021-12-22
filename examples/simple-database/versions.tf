@@ -6,7 +6,7 @@ terraform {
       version = "~> 3.0.0"
     }
     postgresql = {
-      source = "cyrilgdn/postgresql"
+      source  = "cyrilgdn/postgresql"
       version = "~> 1.11.0"
     }
     random = {

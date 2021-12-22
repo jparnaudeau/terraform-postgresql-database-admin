@@ -37,7 +37,7 @@ variable "inputs" {
     db_name        = string
     db_admin       = string
     #sslmode        = string
-    extensions     = list(string)
+    extensions = list(string)
     db_roles = list(object({
       id         = string
       role       = string
@@ -48,8 +48,8 @@ variable "inputs" {
       createrole = bool
     }))
     db_grants = list(object({
-      object_type  = string
-      privileges   = list(string)
+      object_type = string
+      privileges  = list(string)
       #schema       = string
       role         = string
       owner_role   = string

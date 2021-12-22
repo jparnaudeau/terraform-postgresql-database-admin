@@ -1,17 +1,17 @@
 # provider connection infos
-pgadmin_user     = "postgres"
-dbhost           = "localhost"
-sslmode          = "disable"
+pgadmin_user = "postgres"
+dbhost       = "localhost"
+sslmode      = "disable"
 
 # for post processing
 postprocessing_playbook_params = {
-  enable = true
+  enable  = true
   db_name = "mydatabase"
   extra_envs = {
-    REGION="paris"
+    REGION = "paris"
   }
   refresh_passwords = ["all"]
-  shell_name = "./gen-password.sh"
+  shell_name        = "./gen-password.sh"
 }
 
 inputs = {

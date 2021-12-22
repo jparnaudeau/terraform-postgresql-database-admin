@@ -20,24 +20,24 @@ variable "dbport" {
 # passwords vars
 ########################################
 variable "passwords" {
-  type = map(string)
+  type        = map(string)
   description = "Map of credentials, <username> = <password>"
   default     = {}
-} 
+}
 
 ########################################
 # Input vars for creating users inside database
 ########################################
 variable "db_users" {
   type = list(object({
-      name             = string
-      inherit          = bool
-      login            = bool
-      membership       = list(string)
-      validity         = string
-      connection_limit = number
-      createrole       = bool
-      })
+    name             = string
+    inherit          = bool
+    login            = bool
+    membership       = list(string)
+    validity         = string
+    connection_limit = number
+    createrole       = bool
+    })
   )
   description = "The Inputs parameters for objects to create inside the database"
   default     = null
@@ -58,17 +58,17 @@ variable "db_users" {
 variable "postprocessing_playbook_params" {
   description = "params for postprocessing playbook"
   type = object({
-    enable  = bool
-    db_name = string
-    extra_envs = map(string)
-    shell_name = string
+    enable            = bool
+    db_name           = string
+    extra_envs        = map(string)
+    shell_name        = string
     refresh_passwords = list(string)
   })
   default = {
-    enable  = false
-    db_name = ""
-    extra_envs = {}
-    shell_name = ""
+    enable            = false
+    db_name           = ""
+    extra_envs        = {}
+    shell_name        = ""
     refresh_passwords = []
   }
 }

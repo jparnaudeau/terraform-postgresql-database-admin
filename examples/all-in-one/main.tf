@@ -31,8 +31,8 @@ module "initdb" {
 # we update systematically the value of the parameter
 ####################################################################
 locals {
-  namespace = format("/%s/%s",var.environment,var.inputs["db_name"])
-  tags      = merge(var.tags,{"environment" = var.environment})
+  namespace = format("/%s/%s", var.environment, var.inputs["db_name"])
+  tags      = merge(var.tags, { "environment" = var.environment })
 }
 
 # the ssm parameters for storing username
@@ -115,14 +115,14 @@ module "create_users" {
 
   # set postprocessing playbook
   postprocessing_playbook_params = {
-    enable = true
+    enable  = true
     db_name = var.inputs["db_name"]
     extra_envs = {
-      REGION = data.aws_region.current.name
+      REGION      = data.aws_region.current.name
       ENVIRONMENT = var.environment
     }
     refresh_passwords = ["all"]
-    shell_name = "./gen-password-in-ps.sh"
+    shell_name        = "./gen-password-in-ps.sh"
   }
 
 }

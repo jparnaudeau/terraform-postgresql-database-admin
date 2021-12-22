@@ -4,7 +4,7 @@
 ########################################
 resource "postgresql_database" "db" {
   for_each = var.create_database ? toset([var.inputs["db_name"]]) : []
-  
+
   name              = var.inputs["db_name"]
   owner             = var.inputs["db_admin"]
   template          = "template0"
@@ -26,7 +26,7 @@ resource "postgresql_database" "db" {
 resource "postgresql_role" "app_role_admin" {
   # because there is a dependency between the admin role used to be the owner of the objects (var.inputs["db_admin"]) and the database and the other roles,
   # we need to create this role first. Except when the role is a user that already exists, like when var.inputs["db_admin"] == 'postgres" by example.
-  for_each = { for tuple in var.inputs["db_roles"] : tuple.role => tuple if tuple.role == var.inputs["db_admin"] && ! contains(var.default_superusers_list,var.inputs["db_admin"]) }
+  for_each = { for tuple in var.inputs["db_roles"] : tuple.role => tuple if tuple.role == var.inputs["db_admin"] && !contains(var.default_superusers_list, var.inputs["db_admin"]) }
 
 
   name        = each.value.role
