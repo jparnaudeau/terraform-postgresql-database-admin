@@ -242,7 +242,22 @@ tags = {
 
 ```
 
-# script used by the postprocessing playbook
+## Allowed UseCase Matrix 
+
+Based on those inputs, this is the matrix providing permissions for the different users defined in this example : 
+
+|DDB User|Login on database|Create/Drop Database|Create/Drop Schema|Create/Drop Role|Create/Drop Table|Insert/Delete items in Table|Select on table|
+|--------|-----------------|--------------------|------------------|----------------|-----------------|----------------------------|---------------|
+|postgres|OK               |                  OK|                OK|              OK|               OK|                          OK|             OK|
+|admin   |               OK|                  OK|                OK|OK (By default can't create role)|OK|OK|OK|
+|backend |OK               |OK (Permission denied)|OK (Permission denied)|OK (Permission denied)|OK (Permission denied)|OK|OK|
+|readonly|OK               |OK (Permission denied)|OK (Permission denied)|OK (Permission denied)|OK (Permission denied)|OK (Permission denied)|OK|
+
+Note : you can allow the user `admin` to create role, by using the field **createrole** in the **db_users** declaration.
+
+
+
+## script used by the postprocessing playbook
 
 The postprocessing playbook put the native postgresql environment variables : DBUSER, PGHOST, PGPORT, PGUSER, PGDATABASE. So you can use it inside your shell.
 
