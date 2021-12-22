@@ -84,7 +84,7 @@ This sub-module is in charge to create :
 
 * `postgresql grant` : the list of grants that will be associated to the role.
 
-This module uses a terraform object structure : Check the `simple-database` usecase to have a complete example.
+This module uses a terraform object structure : Check the [simple-database](./examples/simple-database) usecase to have a complete example.
 
 you could find all Inputs & outputs of this submodule here : [docs](./create-database/README.md)
 
@@ -99,7 +99,7 @@ This sub-module is in charge to create :
 * To provide a way to manage at posteriori the password of users created by the module, a system of `postprocessing playbook` is available to set the password securely. Why securely ? because it use a `terraform null_resource` to perform the update of the password in the database and to store the password in a safe place of your choice.
 
 
-check the `create-users-on-existent-database` or `all-in-one` usecases to have complete examples.
+check the [create-users-on-existent-database](./examples/create-users-on-existent-database) or [all-in-one](./examples/all-in-one) usecases to have complete examples.
 
 you could find all Inputs & outputs of this submodule here : [docs](./create-users/README.md)
 
@@ -108,10 +108,10 @@ you could find all Inputs & outputs of this submodule here : [docs](./create-use
 
 |Example|UseCase|
 |-------|--------|
-|[simple-database](./example/simple-database/README.md)|Demonstration How to create Database, Roles, and Grants objects.|
-|[create-users-on-existent-database](./example/create-users-on-existent-database/README.md)|From an existent database, you can create several users. This usecase use a trivial postprocessing playbook for example. **DO NOT USE THIS PLAYBOOK IN PRODUCTION, IT's NOT SAFE.**|
-|[all-in-one](./example/all-in-one/README.md)|Demonstration How to create Database, Roles, Users in one phase. This usecase use a postprocessing playbook that generate passwords, set password for each users, and store the password in the parameterStore into an AWS Account.|
-|[full-rds-example](./example/full-rds-example/README.md)|Demonstration for other features covered by the module : Demonstrate an another postprocessing playbook that generate passwords into AWS SecretsManager, deploy the `pgaudit` extension for real-time monitoring, and deploy lambda to stream the audit logs.|
+|[simple-database](./examples/simple-database/README.md)|Demonstration How to create Database, Roles, and Grants objects.|
+|[create-users-on-existent-database](./examples/create-users-on-existent-database/README.md)|From an existent database, you can create several users. This usecase use a trivial postprocessing playbook for example. **DO NOT USE THIS PLAYBOOK IN PRODUCTION, IT's NOT SAFE.**|
+|[all-in-one](./examples/all-in-one/README.md)|Demonstration How to create Database, Roles, Users in one phase. This usecase use a postprocessing playbook that generate passwords, set password for each users, and store the password in the parameterStore into an AWS Account.|
+|[full-rds-example](./examples/full-rds-example/README.md)|Demonstration for other features covered by the module : Demonstrate an another postprocessing playbook that generate passwords into AWS SecretsManager, deploy the `pgaudit` extension for real-time monitoring, and deploy lambda to stream the audit logs.|
 
 
 ### Prerequirements
