@@ -124,7 +124,7 @@ module "fake_user_password" {
 data "aws_region" "current" {}
 
 module "create_users" {
-  source = "../../create-users"
+  source = "git::https://github.com/jparnaudeau/terraform-postgresql-database-admin.git//create-users?ref=master"
 
   # need that all objects, managed inside the module "initdb", are created
   depends_on = [module.initdb]
