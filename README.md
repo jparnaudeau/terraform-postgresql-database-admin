@@ -19,16 +19,17 @@ The module is divided into 2 sub-modules and several examples that illustrates d
 
 |Example|UseCase|
 |-------|--------|
-|[simple-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/simple-database/README.md)|Demonstration How to create Database, Roles, and Grants objects.|
-|[create-users-on-existent-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/create-users-on-existent-database/README.md)|From an existent database, you can create several users. This usecase use a trivial postprocessing playbook for example. **DO NOT USE THIS PLAYBOOK IN PRODUCTION, IT's NOT SAFE.**|
-|[all-in-one](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/all-in-one/README.md)|Demonstration How to create Database, Roles, Users in one phase. This usecase use a postprocessing playbook that generate passwords, set password for each users, and store the password in the parameterStore into an AWS Account.|
-|[full-rds-example](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/full-rds-example/README.md)|Demonstration for other features covered by the module : Demonstrate an another postprocessing playbook that generate passwords into AWS SecretsManager, deploy the `pgaudit` extension for real-time monitoring, and deploy lambda to stream the audit logs. Coming in a future release.|
+|[simple-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/simple-database/README.md)|Demonstration How to create Database, Roles, and Grants objects.|
+|[create-users-on-existent-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/create-users-on-existent-database/README.md)|From an existent database, you can create several users. This usecase use a trivial postprocessing playbook for example. **DO NOT USE THIS PLAYBOOK IN PRODUCTION, IT's NOT SAFE.**|
+|[all-in-one](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/all-in-one/README.md)|Demonstration How to create Database, Roles, Users in one phase. This usecase use a postprocessing playbook that generate passwords, set password for each users, and store the password in the parameterStore into an AWS Account.|
+|[full-rds-example](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/full-rds-example/README.md)|Demonstration for other features covered by the module : Demonstrate an another postprocessing playbook that generate passwords into AWS SecretsManager, deploy the `pgaudit` extension for real-time monitoring, and deploy lambda to stream the audit logs. Coming in a future release.|
 
 ## Diagram
 
 The diagram below illustrate what we neeed to do : 
 
-![db-relations](https://github.com/jparnaudeau/terraform-postgresql-database-admin/blob/v1.0.0/schemas/Diagram-Relations.png)
+<img src="https://github.com/jparnaudeau/terraform-postgresql-database-admin/blob/master/schemas/Diagram-Relations.png">
+
 
 |Actor|Remarks|
 |------|------|
@@ -93,9 +94,9 @@ This sub-module is in charge to create :
 
 * `postgresql grant` : the list of grants that will be associated to the role.
 
-This module uses a terraform object structure : Check the [simple-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/simple-database) usecase to have a complete example.
+This module uses a terraform object structure : Check the [simple-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/simple-database) usecase to have a complete example.
 
-you could find all Inputs & outputs of this submodule here : [docs](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/create-database/README.md)
+you could find all Inputs & outputs of this submodule here : [docs](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/create-database/README.md)
 
 
 ### create-users & Password Management
@@ -108,9 +109,9 @@ This sub-module is in charge to create :
 * To provide a way to manage at posteriori the password of users created by the module, a system of `postprocessing playbook` is available to set the password securely. Why securely ? because it use a `terraform null_resource` to perform the update of the password in the database and to store the password in a safe place of your choice.
 
 
-check the [create-users-on-existent-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/create-users-on-existent-database) or [all-in-one](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/all-in-one) usecases to have complete examples.
+check the [create-users-on-existent-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/create-users-on-existent-database) or [all-in-one](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/all-in-one) usecases to have complete examples.
 
-you could find all Inputs & outputs of this submodule here : [docs](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/create-users/README.md)
+you could find all Inputs & outputs of this submodule here : [docs](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/create-users/README.md)
 
 
 
