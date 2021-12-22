@@ -1,4 +1,4 @@
-# create-users-on-existent-database
+# all-in-one
 
 This example shows a complete real case. In this example, we will : 
 
