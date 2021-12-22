@@ -1,0 +1,19 @@
+#  Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+*.terraform.lock.hcl
+
+.idea
+.env
+/.bin
+
+.project
+
+*.zip
+
+**/*Zone.Identifier
+
+gen-docs.sh
