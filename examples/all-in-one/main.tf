@@ -67,7 +67,7 @@ resource "random_password" "passwords" {
   override_special = "@#%&?"
 }
 
-# the ssm parameters for storing password of ech user
+# the ssm parameters for storing password of each user
 module "fake_user_password" {
   source   = "../../ssm-parameter"
   for_each = { for user in var.inputs["db_users"] : user.name => user }
@@ -121,7 +121,7 @@ module "create_users" {
       REGION = data.aws_region.current.name
       ENVIRONMENT = var.environment
     }
-    refresh_passwords = []
+    refresh_passwords = ["all"]
     shell_name = "./gen-password-in-ps.sh"
   }
 
