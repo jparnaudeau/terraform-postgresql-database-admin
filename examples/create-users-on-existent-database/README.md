@@ -1,8 +1,8 @@
 # create-users-on-existent-database
 
-This example shows you how to create users after a clean initialisation of a database i.e, with roles created in the example [simple-database](../simple-database).
+This example shows you how to create users after a clean initialisation of a database i.e, with roles created in the example [simple-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/simple-database).
 
-You can find a complete example for creating database, roles and users in the example [all-in-one](../all-in-one).
+You can find a complete example for creating database, roles and users in the example [all-in-one](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/all-in-one).
 
 This example provide a first illustration to "How to set password" with the postprocessing playbook.
 
@@ -180,4 +180,4 @@ exit 0
 
 ```
 
-As you can see, we generate a random password and store the password in a file !! DO NOT DO THIS IN PRODUCTION !!. You can find a real secure script in the [all-in-one](../all-in-one) example.
+As you can see, we generate a random password and store the password in a file !! DO NOT DO THIS IN PRODUCTION !!. You can find a real secure script in the [all-in-one](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/v1.0.0/examples/all-in-one) example.
