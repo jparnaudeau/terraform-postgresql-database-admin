@@ -96,7 +96,7 @@ This sub-module is in charge to create :
 
 This module uses a terraform object structure : Check the [simple-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/simple-database) usecase to have a complete example.
 
-you could find all Inputs & outputs of this submodule here : [docs](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/create-database/README.md)
+you could find all Inputs & outputs of this submodule here : [docs](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/create-database/README.md)
 
 
 ### create-users & Password Management
@@ -111,7 +111,7 @@ This sub-module is in charge to create :
 
 check the [create-users-on-existent-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/create-users-on-existent-database) or [all-in-one](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/all-in-one) usecases to have complete examples.
 
-you could find all Inputs & outputs of this submodule here : [docs](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/create-users/README.md)
+you could find all Inputs & outputs of this submodule here : [docs](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/create-users/README.md)
 
 
 

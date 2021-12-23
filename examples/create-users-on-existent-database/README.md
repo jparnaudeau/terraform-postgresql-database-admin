@@ -150,7 +150,7 @@ The different parameters available in the object `postprocessing_playbook_params
 * **db_name** : set the name of the database in which the users are related.
 * **extra_envs** : you can pass extra environment variables that are available inside your script.
 * **refresh_passwords** : you can force the execution of the postprocessing playbook for particular passwords. Just set in this field, the list of users for which you want a new password. In this case, a variable **REFRESH_PASSWORD** will be setted to `true`. Keep `all` if you want systematically regenerate new password for each user.
-* **shell_name** : it's your responsabilities to write a shell that generate passwords, update the user in the postgresql database, and store it in a safe place.
+* **shell_name** : it's your responsability to write a shell that generate passwords, update the user in the postgresql database, and store it in a safe place.
 
 
 # a dummy script used by the postprocessing playbook

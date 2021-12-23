@@ -160,7 +160,7 @@ module "create_users" {
       REGION = data.aws_region.current.name
       ENVIRONMENT = var.environment
     }
-    refresh_passwords = []
+    refresh_passwords = ["all"]
     shell_name = "./gen-password-in-ps.sh"
   }
 
