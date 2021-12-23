@@ -116,7 +116,7 @@ inputs = {
   # 
   # Regarding passwords, it's the shell "gen-password.sh" executed in the postprocessing playbook that in charge to set password for each user.
   db_users = [
-    { name = "audejavel", inherit = true, login = true, membership = ["app_readonly_role"], validity = "2022-12-31 00:00:00+00", connection_limit = -1, createrole = false },
+    { name = "audejavel", inherit = true, login = true, membership = ["app_readonly_role"], validity = "2021-12-31 00:00:00+00", connection_limit = -1, createrole = false },
     { name = "reporting", inherit = true, login = true, membership = ["app_readonly_role"], validity = "infinity", connection_limit = -1, createrole = false },
     { name = "backend", inherit = true, login = true, membership = ["app_write_role"], validity = "infinity", connection_limit = -1, createrole = false },
   ]
@@ -146,7 +146,7 @@ postprocessing_playbook_params = {
 
 The different parameters available in the object `postprocessing_playbook_params` are : 
 
-* **enable** : you need to enable the postprocessing playbook execution. If by example, you prepare passwords in a secure way, by example in an ecrypted file, you can use a terraform datasource to read this file (see this [post](https://blog.gruntwork.io/a-comprehensive-guide-to-managing-secrets-in-your-terraform-code-1d586955ace1) ), you can pass directly the passwords into the module without the need to execute the postprocessing playbook. Otherwise, enable it.
+* **enable** : you need to enable the postprocessing playbook execution. If by example, you prepare passwords in a secure way, by example in an encrypted file, you can use a terraform datasource to read this file (see this [post](https://blog.gruntwork.io/a-comprehensive-guide-to-managing-secrets-in-your-terraform-code-1d586955ace1) ), you can pass directly the passwords into the module without the need to execute the postprocessing playbook. Otherwise, enable it.
 * **db_name** : set the name of the database in which the users are related.
 * **extra_envs** : you can pass extra environment variables that are available inside your script.
 * **refresh_passwords** : you can force the execution of the postprocessing playbook for particular passwords. Just set in this field, the list of users for which you want a new password. In this case, a variable **REFRESH_PASSWORD** will be setted to `true`. Keep `all` if you want systematically regenerate new password for each user.
