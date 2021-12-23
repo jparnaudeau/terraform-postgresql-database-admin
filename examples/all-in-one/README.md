@@ -120,6 +120,37 @@ Notes :
 * by creating the parameters before the postprocessing playbook, it simplifies the shell executed by the playbook.
 
 
+## call the module to initialize the database and all objects (roles,grants)
+
+```hcl
+
+########################################
+# Initialize the database and the objects 
+# (roles & grants), the default privileges
+########################################
+module "initdb" {
+
+  source = "../../create-database"
+
+  # set the provider
+  providers = {
+    postgresql = postgresql.pgadm
+  }
+
+  # targetted rds
+  pgadmin_user = var.pgadmin_user
+  dbhost       = var.dbhost
+  dbport       = var.dbport
+
+  # input parameters for creating database & objects inside database
+  create_database = true
+  inputs          = var.inputs
+}
+
+
+```
+
+
 ## call the module to create the users and use the postprocessing playbook to store passwords in parameterStore.
 
 ```hcl
