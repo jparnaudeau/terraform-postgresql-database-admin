@@ -45,7 +45,7 @@ Note : the password of the `var.pgadmin_user` are stored in the environment vari
 
 module "initdb" {
 
-  source = "git::https://github.com/jparnaudeau/terraform-postgresql-database-admin.git//create-database?ref=master"
+  source = "../../create-database?ref=master"
 
 
   # set the provider

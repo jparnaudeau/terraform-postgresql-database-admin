@@ -20,15 +20,17 @@ The module is divided into 2 sub-modules and several examples that illustrates d
 |Example|UseCase|
 |-------|--------|
 |[simple-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/simple-database/README.md)|Demonstration How to create Database, Roles, and Grants objects.|
-|[create-users-on-existent-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/create-users-on-existent-database/README.md)|From an existent database, you can create several users. This usecase use a trivial postprocessing playbook for example. **DO NOT USE THIS PLAYBOOK IN PRODUCTION, IT's NOT SAFE.**|
-|[all-in-one](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/all-in-one/README.md)|Demonstration How to create Database, Roles, Users in one phase. This usecase use a postprocessing playbook that generate passwords, set password for each users, and store the password in the parameterStore into an AWS Account.|
+|[create-users-on-existent-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/create-users-on-existent-database/README.md)|From an existent database, you can create several users. This usecase uses a trivial postprocessing playbook for example. **DO NOT USE THIS PLAYBOOK IN PRODUCTION, IT's NOT SAFE.**|
+|[all-in-one](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/all-in-one/README.md)|Demonstration How to create Database, Roles, Users in one phase. This usecase uses a postprocessing playbook that generate passwords, set password for each users, and store the password in the parameterStore into an AWS Account.|
 |[full-rds-example](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/full-rds-example/README.md)|Demonstration for other features covered by the module : Demonstrate an another postprocessing playbook that generate passwords into AWS SecretsManager, deploy the `pgaudit` extension for real-time monitoring, and deploy lambda to stream the audit logs. Coming in a future release.|
 
 ## Diagram
 
 The diagram below illustrate what we neeed to do : 
 
-<img src="https://github.com/jparnaudeau/terraform-postgresql-database-admin/blob/master/schemas/Diagram-Relations.png">
+<img src="./schemas/Diagram-Relations.png">
+
+_The rendering of the image is available on github page_
 
 
 |Actor|Remarks|
@@ -49,7 +51,7 @@ Notes :
 
 ### Working in the public schema
 
-When a new database is created, PostgreSQL by default creates a schema named public and grants access on this schema to a backend role named public. All new users and roles are by default granted this public role, and therefore can create objects in the public schema.
+When a new database is created, PostgreSQL by default creates a schema named `public` and grants access on this schema to a backend role named public. All new users and roles are by default granted this public role, and therefore can create objects in the public schema.
 
 PostgreSQL uses a concept of a search path. The search path is a list of schema names that PostgreSQL checks when you don’t use a qualified name of the database object. For example, when you select from a table named `mytable`, PostgreSQL looks for this table in the schemas listed in the search path. It chooses the first match it finds. By default, the search path contains the following schemas:
 

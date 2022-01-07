@@ -299,7 +299,11 @@ Note : you can allow the user `admin` to create role, by using the field **creat
 
 ## script used by the postprocessing playbook
 
-The postprocessing playbook put the native postgresql environment variables : DBUSER, PGHOST, PGPORT, PGUSER, PGDATABASE. So you can use it inside your shell.
+The postprocessing playbook generates a set of environments variables : 
+
+* Native postgresql environment variables : DBUSER, PGHOST, PGPORT, PGUSER, PGDATABASE. So you can use it inside your shell.
+* all extra variables defined in `extra_envs`.
+* a variable `REFRESH_PASSWORD` if you want control the execution of the update. 
 
 ```
 
@@ -387,11 +391,6 @@ Connect with the backend user to insert line into this table
 
 psql -h localhost -p 5432 -U backend -d mydatabase -W
 Password: <find password in parameterStore at test/mydatabase/rds/backend_password>
-
-psql (12.8 (Ubuntu 12.8-0ubuntu0.20.04.1), server 13.4 (Debian 13.4-4.pgdg110+1))
-WARNING: psql major version 12, server major version 13.
-         Some psql features might not work.
-Type "help" for help.
 
 psql (12.8 (Ubuntu 12.8-0ubuntu0.20.04.1), server 13.4 (Debian 13.4-4.pgdg110+1))
 WARNING: psql major version 12, server major version 13.
