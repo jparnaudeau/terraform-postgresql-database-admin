@@ -30,6 +30,8 @@ The diagram below illustrate what we neeed to do :
 
 <img src="./schemas/Diagram-Relations.png">
 
+_The rendering of the image is available on github page_
+
 
 |Actor|Remarks|
 |------|------|
@@ -42,7 +44,7 @@ The diagram below illustrate what we neeed to do :
 
 Notes : 
 
-* Roles are independent from the database and schema. But we advice to create the 3 roles (admin,readonly,write) for each database and do not shared roles accross databases. That why, in the examples, we prefixe the name of the role by `app`, a trigram that can easily differentiate role in real usecases. If you need a user with permissions on differents databases, a user can inherits permissions from several roles.
+* Roles are independent from the database and schema. But we advice to create the 3 roles (admin,readonly,write) for each database and do not shared roles accross databases. That why, in the examples, we prefixe the name of the role by `app`, a trigram that can easily differentiate role in real usecases. If you need a user with permissions on differents databases, a user can inherits permissions from several roles. By example, role "write" for a database A, role "read" for a database B.
 * We create 3 roles (admin,write,readonly) but you can be more granular. By example, splitting the role write into several write roles, allowing the permissions insert/update/delete only on specific tables. the security pattern `Least privilege` can be applied at this level.
 
 ## schema public vs custom schema
