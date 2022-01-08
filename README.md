@@ -30,8 +30,6 @@ The diagram below illustrate what we neeed to do :
 
 <img src="./schemas/Diagram-Relations.png">
 
-_The rendering of the image is available on github page_
-
 
 |Actor|Remarks|
 |------|------|
