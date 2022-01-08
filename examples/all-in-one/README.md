@@ -63,7 +63,9 @@ locals {
 
 # the ssm parameters for storing username
 module "ssm_db_users" {
-  source = "git::https://github.com/jparnaudeau/terraform-postgresql-database-admin.git//ssm-parameter?ref=master"
+  source  = "jparnaudeau/database-admin/postgresql//ssm-parameter"
+  version = "1.0.6"
+
   for_each = { for user in var.inputs["db_users"] : user.name => user }
 
   namespace = local.namespace
@@ -95,7 +97,9 @@ resource "random_password" "passwords" {
 
 # the ssm parameters for storing password of each user
 module "fake_user_password" {
-  source = "git::https://github.com/jparnaudeau/terraform-postgresql-database-admin.git//ssm-parameter?ref=master"
+  source  = "jparnaudeau/database-admin/postgresql//ssm-parameter"
+  version = "1.0.6"
+
   for_each = { for user in var.inputs["db_users"] : user.name => user }
 
   namespace = local.namespace
@@ -130,7 +134,9 @@ Notes :
 ########################################
 module "initdb" {
 
-  source = "../../create-database"
+  source  = "jparnaudeau/database-admin/postgresql//create-database"
+  version = "1.0.6"
+
 
   # set the provider
   providers = {
@@ -162,7 +168,8 @@ module "initdb" {
 data "aws_region" "current" {}
 
 module "create_users" {
-  source = "git::https://github.com/jparnaudeau/terraform-postgresql-database-admin.git//create-users?ref=master"
+  source  = "jparnaudeau/database-admin/postgresql//create-users"
+  version = "1.0.6"
 
   # need that all objects, managed inside the module "initdb", are created
   depends_on = [module.initdb]

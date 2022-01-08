@@ -1,7 +1,7 @@
 module "initdb" {
 
-  source = "../../create-database"
-  #source = "git::https://github.com/jparnaudeau/terraform-postgresql-database-admin.git//create-database?ref=jpa/first-version"
+  source  = "jparnaudeau/database-admin/postgresql//create-database"
+  version = "1.0.6"
 
 
   # set the provider

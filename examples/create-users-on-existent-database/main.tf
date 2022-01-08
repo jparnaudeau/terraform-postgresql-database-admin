@@ -20,7 +20,9 @@ resource "random_password" "passwords" {
 # Create the users inside the database
 #########################################
 module "create_users" {
-  source = "../../create-users"
+  source  = "jparnaudeau/database-admin/postgresql//create-users"
+  version = "1.0.6"
+
 
   # set the provider
   providers = {

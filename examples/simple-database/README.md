@@ -45,8 +45,8 @@ Note : the password of the `var.pgadmin_user` are stored in the environment vari
 
 module "initdb" {
 
-  source = "../../create-database?ref=master"
-
+  source  = "jparnaudeau/database-admin/postgresql//create-database"
+  version = "1.0.6"
 
   # set the provider
   providers = {

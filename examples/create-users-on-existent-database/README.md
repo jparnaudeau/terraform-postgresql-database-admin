@@ -67,7 +67,8 @@ resource "random_password" "passwords" {
 #########################################
 module "create_users" {
 
-  source = "git::https://github.com/jparnaudeau/terraform-postgresql-database-admin.git//create-users?ref=master"
+  source  = "jparnaudeau/database-admin/postgresql//create-users"
+  version = "1.0.6"
 
   # set the provider
   providers = {
