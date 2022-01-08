@@ -22,8 +22,8 @@ output "db_users" {
   description = "The list of users created by the module"
   value = { for user in var.inputs["db_users"] :
     user.name => {
-      "parameter_store_user"          = format("%s/%s/%s/%s_user", var.environment, var.inputs["db_name"], "rds", user.name),
-      "parameter_store_user_password" = format("%s/%s/%s/%s_password", var.environment, var.inputs["db_name"], "rds", user.name),
+      "parameter_store_user"          = format("%s/%s_user", local.namespace, user.name),
+      "parameter_store_user_password" = format("%s/%s_password", local.namespace, user.name),
       "connect_command"               = format("psql -h %s -p %s -U %s -d %s -W", var.dbhost, var.dbport, user.name, var.inputs["db_name"])
     }
   }

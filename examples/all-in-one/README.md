@@ -309,17 +309,22 @@ The postprocessing playbook generates a set of environments variables :
 
 #!/bin/bash
 
-# generate a random password
-USERPWD=$(openssl rand -base64 16 |tr -d '[;+%$!/]');
+if [ "${REFRESH_PASSWORD}" == "true" ]
+then
 
-# generate the parameterStore path
-USER_PWD_PATH="/${ENVIRONMENT}/${PGDATABASE}/${DBUSER}_password"
+    # generate a random password
+    USERPWD=$(openssl rand -base64 16 |tr -d '[;+%$!/]');
 
-# Alter user inside postgresql database
-psql -c "ALTER USER $DBUSER WITH PASSWORD '$USERPWD'";
+    # generate the parameterStore path
+    USER_PWD_PATH="/${ENVIRONMENT}/${PGDATABASE}/${DBUSER}_password"
 
-# Alter Secret Storage
-aws ssm put-parameter --name $USER_PWD_PATH --type SecureString --overwrite --value $USERPWD --region $REGION;
+    # Alter user inside postgresql database
+    psql -c "ALTER USER $DBUSER WITH PASSWORD '$USERPWD'";
+
+    # Alter Secret Storage
+    aws ssm put-parameter --name $USER_PWD_PATH --type SecureString --overwrite --value $USERPWD --region $REGION;
+
+fi
 
 exit 0
 
@@ -349,18 +354,18 @@ created_roles = [
 db_users = {
   "admin" = {
     "connect_command" = "psql -h localhost -p 5432 -U admin -d mydatabase -W"
-    "parameter_store_user" = "test/mydatabase/rds/admin_user"
-    "parameter_store_user_password" = "test/mydatabase/rds/admin_password"
+    "parameter_store_user" = "/test/mydatabase/admin_user"
+    "parameter_store_user_password" = "/test/mydatabase/admin_password"
   }
   "backend" = {
     "connect_command" = "psql -h localhost -p 5432 -U backend -d mydatabase -W"
-    "parameter_store_user" = "test/mydatabase/rds/backend_user"
-    "parameter_store_user_password" = "test/mydatabase/rds/backend_password"
+    "parameter_store_user" = "/test/mydatabase/backend_user"
+    "parameter_store_user_password" = "/test/mydatabase/backend_password"
   }
   "readonly" = {
     "connect_command" = "psql -h localhost -p 5432 -U readonly -d mydatabase -W"
-    "parameter_store_user" = "test/mydatabase/rds/readonly_user"
-    "parameter_store_user_password" = "test/mydatabase/rds/readonly_password"
+    "parameter_store_user" = "/test/mydatabase/readonly_user"
+    "parameter_store_user_password" = "/test/mydatabase/readonly_password"
   }
 }
 
@@ -372,7 +377,7 @@ Connect with the admin user to create table
 ```
 
 psql -h localhost -p 5432 -U admin -d mydatabase -W
-Password: <find password in parameterStore at test/mydatabase/rds/admin_password>
+Password: <find password in parameterStore at /test/mydatabase/admin_password>
 
 psql (12.8 (Ubuntu 12.8-0ubuntu0.20.04.1), server 13.4 (Debian 13.4-4.pgdg110+1))
 WARNING: psql major version 12, server major version 13.
@@ -390,7 +395,7 @@ Connect with the backend user to insert line into this table
 ```
 
 psql -h localhost -p 5432 -U backend -d mydatabase -W
-Password: <find password in parameterStore at test/mydatabase/rds/backend_password>
+Password: <find password in parameterStore at /test/mydatabase/backend_password>
 
 psql (12.8 (Ubuntu 12.8-0ubuntu0.20.04.1), server 13.4 (Debian 13.4-4.pgdg110+1))
 WARNING: psql major version 12, server major version 13.
@@ -431,7 +436,7 @@ Test the permissions for readonly user :
 ```
 
 psql -h localhost -p 5432 -U readonly -d mydatabase -W
-Password: <find password in parameterStore at test/mydatabase/rds/readonly_password>
+Password: <find password in parameterStore at test/mydatabase/readonly_password>
 psql (12.8 (Ubuntu 12.8-0ubuntu0.20.04.1), server 13.4 (Debian 13.4-4.pgdg110+1))
 WARNING: psql major version 12, server major version 13.
          Some psql features might not work.
