@@ -28,7 +28,9 @@ The module is divided into 2 sub-modules and several examples that illustrates d
 
 The diagram below illustrate what we neeed to do : 
 
-<img src="./schemas/Diagram-Relations.png">
+
+![Diagram](./schemas/Diagram-Relations.png)
+
 
 _The rendering of the image is available on github page_
 
