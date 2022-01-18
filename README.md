@@ -29,10 +29,8 @@ The module is divided into 2 sub-modules and several examples that illustrates d
 The diagram below illustrate what we neeed to do : 
 
 
-<img src="./schemas/Diagram-Relations.png" width="600" height="500">
+<img src="https://github.com/jparnaudeau/terraform-postgresql-database-admin/blob/master/schemas/Diagram-Relations.png">
 
-
-_The rendering of the image is available on github page_
 
 
 |Actor|Remarks|
