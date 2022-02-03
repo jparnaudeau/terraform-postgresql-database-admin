@@ -17,3 +17,5 @@
 **/*Zone.Identifier
 
 gen-docs.sh
+
+examples/full-rds-example/.envrc
