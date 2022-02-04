@@ -1,24 +1,24 @@
 output "vpc_infos" {
-    description = "map of vpc informations"
-    value       = {
-        vpc_id           = module.vpc.vpc_id,
-        vpc_name         = module.vpc.name,
-        public_subnets   = module.vpc.public_subnets,
-        private_subnets  = module.vpc.private_subnets,
-        database_subnets = module.vpc.database_subnets
-    }
+  description = "map of vpc informations"
+  value = {
+    vpc_id           = module.vpc.vpc_id,
+    vpc_name         = module.vpc.name,
+    public_subnets   = module.vpc.public_subnets,
+    private_subnets  = module.vpc.private_subnets,
+    database_subnets = module.vpc.database_subnets
+  }
 }
 
 output "rds_infos" {
-    description = "map of rds informations"
-    value       = {
-        db_instance_address  = module.rds.db_instance_address,
-        db_instance_arn      = module.rds.db_instance_arn,
-        db_instance_endpoint = module.rds.db_instance_endpoint,
-        db_instance_id       = module.rds.db_instance_id,
-        db_instance_name     = module.rds.db_instance_name,
-        "connect_command"    = format("psql -h %s -p %s -U %s -d %s -W", module.rds.db_instance_address, var.dbport, var.rds_superuser_name, var.inputs["db_name"])
-    }
+  description = "map of rds informations"
+  value = {
+    db_instance_address  = module.rds.db_instance_address,
+    db_instance_arn      = module.rds.db_instance_arn,
+    db_instance_endpoint = module.rds.db_instance_endpoint,
+    db_instance_id       = module.rds.db_instance_id,
+    db_instance_name     = module.rds.db_instance_name,
+    "connect_command"    = format("psql -h %s -p %s -U %s -d %s -W", module.rds.db_instance_address, var.dbport, var.rds_superuser_name, var.inputs["db_name"])
+  }
 }
 
 
@@ -30,11 +30,6 @@ output "affected_schema" {
 output "created_roles" {
   description = "The list of roles created by the module"
   value       = [for obj_role in var.inputs["db_roles"] : obj_role["role"]]
-}
-
-output "connect_string" {
-  description = "The connect string to use to connect on the database"
-  value       = format("psql -h %s -p %s -U %s -d %s", module.rds.db_instance_address, var.dbport, var.inputs["db_admin"], var.inputs["db_name"])
 }
 
 output "db_users" {

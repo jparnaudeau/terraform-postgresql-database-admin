@@ -1,22 +1,11 @@
 ########################################
 # define variables for postgresql database connectivity
 ########################################
-// variable "dbhost" {
-//   type        = string
-//   default     = "localhost"
-//   description = "The database host"
-// }
-
 variable "dbport" {
   type        = number
   default     = 5432
   description = "The database port"
 }
-
-// variable "pgadmin_user" {
-//   type        = string
-//   description = "The RDS user to used for creating/managing other user in the database."
-// }
 
 variable "sslmode" {
   type        = string
@@ -51,6 +40,9 @@ variable "inputs" {
   default     = null
 }
 
+########################################
+# define global variables tags, env, ...
+########################################
 variable "tags" {
   type        = map(string)
   description = "a map of string used to tag entries in AWS Secrets Manager"
@@ -62,7 +54,6 @@ variable "environment" {
   description = "environment name"
   default     = "sta"
 }
-
 
 ########################################
 # define variables for vpc
@@ -92,7 +83,7 @@ variable "vpc_database_subnets" {
 }
 
 ########################################
-# define variables for rds & aws components 
+# define variables for rds
 ########################################
 variable "region" {
   type        = string
@@ -155,9 +146,9 @@ variable "rds_storage_encrypted" {
 }
 
 variable "rds_superuser_name" {
-  type         = string
-  description  = "The default super-user name"
-  default      = "root"
+  type        = string
+  description = "The default super-user name"
+  default     = "root"
 }
 
 variable "rds_root_password" {
@@ -175,4 +166,14 @@ variable "extensions_parameter_group_params" {
   type        = map(any)
   description = "custom parameter group instance params with apply_method 'pending_reboot'"
   default     = {}
+}
+
+
+########################################
+# define variables for AWS SecretsManager
+########################################
+variable "recovery_window_in_days" {
+  type        = number
+  description = "delay in days during a secret can be recoverd"
+  default     = 7
 }

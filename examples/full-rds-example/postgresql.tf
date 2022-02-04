@@ -4,8 +4,6 @@
 ########################################
 module "initdb" {
 
-  #source  = "jparnaudeau/database-admin/postgresql//create-database"
-  #version = "1.0.6"
   source = "../../create-database"
 
   depends_on = [module.rds]
@@ -23,41 +21,19 @@ module "initdb" {
   # input parameters for creating database & objects inside database
   create_database = false
   inputs          = var.inputs
+
   # because the superuser is not "postgres", need to set it in the module
-  default_superusers_list = ["postgres",var.rds_superuser_name]
+  default_superusers_list = ["postgres", var.rds_superuser_name]
 }
 
 ####################################################################
 # for each users defined in var.inputs, create 
-# - a parameter in parameterStore for storing the user (path : <namespace>/<username>_user)
-# - create a fake password for this user and 
-# - save it into parameterStore at <namespace>/<username>_password
+# - create a fake password for this user
+# - save it into secretsManager with key = "secret-kv-${rds_name}-${username}"
 # 
 # we do this for having only one case to manage in the postprocessing shell : 
-# we update systematically the value of the parameter
+# we update systematically the value of the secret.
 ####################################################################
-locals {
-  namespace = format("/%s/%s", var.environment, var.inputs["db_name"])
-}
-
-# the ssm parameters for storing username
-module "ssm_db_users" {
-  source  = "jparnaudeau/database-admin/postgresql//ssm-parameter"
-  version = "1.0.6"
-
-  for_each = { for user in var.inputs["db_users"] : user.name => user }
-
-  namespace = local.namespace
-  tags      = local.tags
-
-  parameters = {
-    format("%s_user", each.key) = {
-      description = "db user param value rds database"
-      value       = each.key
-      overwrite   = false
-    },
-  }
-}
 
 # the random passwords for each user
 resource "random_password" "passwords" {
@@ -74,24 +50,26 @@ resource "random_password" "passwords" {
   override_special = "@#%&?"
 }
 
-# the ssm parameters for storing password of each user
-module "fake_user_password" {
-  source  = "jparnaudeau/database-admin/postgresql//ssm-parameter"
-  version = "1.0.6"
-
+#########################################
+# Store key/value username/password in AWS SecretsManager
+#########################################
+module "secrets-manager" {
   for_each = { for user in var.inputs["db_users"] : user.name => user }
+  source   = "lgallard/secrets-manager/aws"
+  version  = "0.5.1"
 
-  namespace = local.namespace
-  tags      = local.tags
-
-  parameters = {
-    format("%s_password", each.key) = {
-      description = "db user param value rds database"
-      value       = random_password.passwords[each.key].result
-      type        = "SecureString"
-      overwrite   = false
+  secrets = {
+    "secret-kv-${local.name}-${each.key}" = {
+      description = format("Password for username %s for database %s", each.key, local.name)
+      secret_key_value = {
+        username = each.key
+        password = random_password.passwords[each.key].result
+      }
+      recovery_window_in_days = var.recovery_window_in_days
     },
   }
+
+  tags = local.tags
 }
 
 #########################################
@@ -101,8 +79,6 @@ module "fake_user_password" {
 data "aws_region" "current" {}
 
 module "create_users" {
-  #source  = "jparnaudeau/database-admin/postgresql//create-users"
-  #version = "1.0.6"
   source = "../../create-users"
 
   # need that all objects, managed inside the module "initdb", are created
@@ -129,11 +105,11 @@ module "create_users" {
     enable  = true
     db_name = var.inputs["db_name"]
     extra_envs = {
-      REGION      = data.aws_region.current.name
-      ENVIRONMENT = var.environment
+      REGION   = data.aws_region.current.name
+      RDS_NAME = var.rds_name
     }
     refresh_passwords = ["all"]
-    shell_name        = "./gen-password-in-ps.sh"
+    shell_name        = "./gen-password-in-secretsmanager.py"
   }
 
 }

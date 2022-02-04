@@ -1,6 +1,4 @@
 # provider connection infos
-#pgadmin_user     = "postgres"
-#dbhost           = "localhost"
 expected_version = "12.0.0"
 sslmode          = "disable"
 
@@ -9,7 +7,7 @@ inputs = {
 
   # parameters used for creating database
   db_schema_name = "public"
-  db_name        = "mydatabase"  # should be the same as var.rds_name. if not, a new database will be created
+  db_name        = "mydatabase"     # should be the same as var.rds_name. if not, a new database will be created
   db_admin       = "app_admin_role" #owner of the database
 
   # install extensions if needed
@@ -98,7 +96,7 @@ rds_max_allocated_storage = 20
 allowed_ip_addresses      = ["88.164.184.133/32"]
 
 
-# define parameter groups for our RDS
+# define parameter groups for our RDS, apply_method = "immediate"
 parameter_group_params = {
   autovacuum         = 1
   client_encoding    = "utf8"
