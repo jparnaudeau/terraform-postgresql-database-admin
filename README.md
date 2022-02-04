@@ -22,7 +22,7 @@ The module is divided into 2 sub-modules and several examples that illustrates d
 |[simple-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/simple-database/README.md)|Demonstration How to create Database, Roles, and Grants objects.|
 |[create-users-on-existent-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/create-users-on-existent-database/README.md)|From an existent database, you can create several users. This usecase uses a trivial postprocessing playbook for example. **DO NOT USE THIS PLAYBOOK IN PRODUCTION, IT's NOT SAFE.**|
 |[all-in-one](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/all-in-one/README.md)|Demonstration How to create Database, Roles, Users in one phase. This usecase uses a postprocessing playbook that generate passwords, set password for each users, and store the password in the parameterStore into an AWS Account.|
-|[full-rds-example](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/full-rds-example/README.md)|Demonstration for other features covered by the module : Demonstrate an another postprocessing playbook that generate passwords into AWS SecretsManager, deploy the `pgaudit` extension for real-time monitoring, and deploy lambda to stream the audit logs. Coming in a future release.|
+|[full-rds-example](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/full-rds-example/README.md)|Demonstration for other features covered by the module : Demonstrate an another postprocessing playbook that generate passwords into AWS SecretsManager, deploy the `pgaudit` extension for real-time monitoring, and deploy lambda to stream the audit logs.|
 
 ## Diagram
 
@@ -1557,3 +1557,5 @@ Those modules uses the excellent [postgresql provider](https://registry.terrafor
 You can find a docker-compose file to start locally a postgresql (version 13.4) database and set the password for postgres user. Use the command `docker-compose -f docker-compose.yml up -d`.  
 
 
+## Acknowledgements
+I would like to warmly thank my colleague and friend **Rene Okouia**, Mr Spinnaker, who allowed me to rise to another level of expertise on terraform and who participated in writing the very first version of this module.

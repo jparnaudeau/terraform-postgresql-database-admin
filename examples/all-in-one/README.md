@@ -308,9 +308,10 @@ Note : you can allow the user `admin` to create role, by using the field **creat
 
 The postprocessing playbook generates a set of environments variables : 
 
-* Native postgresql environment variables : DBUSER, PGHOST, PGPORT, PGUSER, PGDATABASE. So you can use it inside your shell.
-* all extra variables defined in `extra_envs`.
+* Native postgresql environment variables : PGHOST, PGPORT, PGUSER, PGDATABASE. So you can use it inside your shell.
+* a variable `DBUSER` representing the user that we want update his password. 
 * a variable `REFRESH_PASSWORD` if you want control the execution of the update. 
+* all extra variables defined in `extra_envs`.
 
 ```
 
