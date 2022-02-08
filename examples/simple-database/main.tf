@@ -1,8 +1,6 @@
 module "initdb" {
 
-  source  = "jparnaudeau/database-admin/postgresql//create-database"
-  version = "1.0.6"
-
+  source  = "../../create-database"
 
   # set the provider
   providers = {

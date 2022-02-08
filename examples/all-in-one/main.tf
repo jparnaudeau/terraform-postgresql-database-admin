@@ -4,8 +4,7 @@
 ########################################
 module "initdb" {
 
-  source  = "jparnaudeau/database-admin/postgresql//create-database"
-  version = "1.0.6"
+  source  = "../../create-database"
 
   # set the provider
   providers = {
@@ -38,8 +37,7 @@ locals {
 
 # the ssm parameters for storing username
 module "ssm_db_users" {
-  source  = "jparnaudeau/database-admin/postgresql//ssm-parameter"
-  version = "1.0.6"
+  source  = "../../ssm-parameter"
 
   for_each = { for user in var.inputs["db_users"] : user.name => user }
 
@@ -72,8 +70,7 @@ resource "random_password" "passwords" {
 
 # the ssm parameters for storing password of each user
 module "fake_user_password" {
-  source  = "jparnaudeau/database-admin/postgresql//ssm-parameter"
-  version = "1.0.6"
+  source  = "../../ssm-parameter"
 
   for_each = { for user in var.inputs["db_users"] : user.name => user }
 
@@ -97,8 +94,7 @@ module "fake_user_password" {
 data "aws_region" "current" {}
 
 module "create_users" {
-  source  = "jparnaudeau/database-admin/postgresql//create-users"
-  version = "1.0.6"
+  source  = "../../create-users"
 
   # need that all objects, managed inside the module "initdb", are created
   depends_on = [module.initdb]
