@@ -4,6 +4,8 @@ export INSTANCE_IDENTIFIER=`terraform output|grep db_instance_id|awk -F '=' '{pr
 
 LOGFILE=$(aws rds describe-db-log-files --db-instance-identifier ${INSTANCE_IDENTIFIER} --query 'DescribeDBLogFiles[-1].[LogFileName]' --output text)
 
+echo "LOGFILE = $LOGFILE"
+
 aws rds download-db-log-file-portion \
 --db-instance-identifier ${INSTANCE_IDENTIFIER} \
 --starting-token 0 \

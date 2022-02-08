@@ -6,19 +6,17 @@ module "vpc" {
   version = "~> 2"
 
   name = format("vpc-%s-%s", var.environment, local.name)
-  cidr = "10.99.0.0/18"
+  cidr = var.vpc_cidr
 
   azs              = ["${var.region}a", "${var.region}b", "${var.region}c"]
-  public_subnets   = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
-  private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
-  database_subnets = ["10.99.7.0/24", "10.99.8.0/24", "10.99.9.0/24"]
+  public_subnets   = var.vpc_public_subnets
+  private_subnets  = var.vpc_private_subnets
+  database_subnets = var.vpc_database_subnets
 
-  create_database_subnet_group           = false
-  create_database_subnet_route_table     = true
-  create_database_internet_gateway_route = true
-
-  enable_dns_hostnames = true
-  enable_dns_support   = true
+  create_database_subnet_group = false
+  
+  enable_dns_hostnames         = true
+  enable_dns_support           = true
 
   tags = local.tags
 }
