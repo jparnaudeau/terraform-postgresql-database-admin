@@ -176,6 +176,7 @@ resource "postgresql_grant" "revoke_create_public" {
 
   depends_on = [
     postgresql_schema.schema,
-    postgresql_database.db
+    postgresql_database.db,
+    postgresql_grant.privileges
   ]
 }
