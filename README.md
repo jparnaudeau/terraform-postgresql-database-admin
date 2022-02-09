@@ -1,18 +1,29 @@
 # terraform-postgresql-database-admin
 
-## Introduction
-
+## Manage Securely your users and their permissions
 Terraform is a great tool to automate "everything" in modern IT. Based on my own experience, i will propose you an abstraction for the management "inside a database" : the management of users and their permissions in a postgresql database. 
 
-This module provides a way to manage securly and properly, the objects, inside a postgresql database. Based on best practices, describe in this blog : 
+This module provides a way to manage securly and properly, the objects, inside a postgresql database. Based on best practices, describe in this blog : https://aws.amazon.com/blogs/database/managing-postgresql-users-and-roles/.
 
-https://aws.amazon.com/blogs/database/managing-postgresql-users-and-roles/
+As it's done in the cloud, the concept of "Least Privilege" should be used. The usecase `full-rds-example` give an example of how to do that with this module.
 
-Moreover, for a database deployed through the AWS Managed Service "RDS", this module also provides a way to deploy an audit system allowing to trace all the requests made, by whom, at what time and from which IP address.
+Managing users means managing their `passwords`. It could be tricky if you want do that in a secure way. Using `random_password` in terraform is not a good idea because the password is stored in clear text into the terraform remote state. Even there is other ways to do that, this module offers a system based on running a post playbook in which the password is generated. This playbook execute a script that you need to write. You could find several implementations in the examples directory.  
 
-The module is divided into 2 sub-modules and several examples that illustrates different aspects of this problematic.
+## Audit your database : PostgreSQL Audit Extension
 
-* The creation of the database with the roles and the permissions associated with (named grant inside postgresql).
+You can find official documentation here : https://www.pgaudit.org/#section_one
+
+This module provides a way to deploy **extension** inside your postgresql engine. It's not specific to `pgaudit`, but can be used with other extensions, like `pg_stat_statements` or `aws_s3`. 
+Moreover, for a database deployed on the **public cloud AWS**, with the AWS Managed Service **RDS**, this module also provides a way to deploy an audit system allowing to trace all the requests made, by whom, at what time and from which IP address, ready to be streamed by a `SOC tool` like `ElasticSearch` or `Splunk`. This feature is implemented by :
+* the installation of `pgaudit` extension.
+* the deployment of a `lambda` function that will stream the log produced by the pgaudit extension.
+* the lambda prints the audit log into a `cloudwatch log group` that can be easily indexed by your official SOC Tool.
+
+## Usecases & Sub-Modules
+
+The module is divided into 2 sub-modules and several examples that illustrates different aspects covered by this module.
+
+* The creation of the database with the roles and the permissions associated with (named `grant` inside postgresql).
 * The creation of the user. For security perspectives, user inherits permissions from role. A user should have an expiration date for his password.
 
 ## Usecases
@@ -21,13 +32,15 @@ The module is divided into 2 sub-modules and several examples that illustrates d
 |-------|--------|
 |[simple-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/simple-database/README.md)|Demonstration How to create Database, Roles, and Grants objects.|
 |[create-users-on-existent-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/create-users-on-existent-database/README.md)|From an existent database, you can create several users. This usecase uses a trivial postprocessing playbook for example. **DO NOT USE THIS PLAYBOOK IN PRODUCTION, IT's NOT SAFE.**|
-|[all-in-one](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/all-in-one/README.md)|Demonstration How to create Database, Roles, Users in one phase. This usecase uses a postprocessing playbook that generate passwords, set password for each users, and store the password in the parameterStore into an AWS Account.|
-|[full-rds-example](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/full-rds-example/README.md)|Demonstration for other features covered by the module : Demonstrate an another postprocessing playbook that generate passwords into AWS SecretsManager, deploy the `pgaudit` extension for real-time monitoring, and deploy lambda to stream the audit logs.|
+|[all-in-one](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/all-in-one/README.md)|Demonstration How to create Database, Roles, Users in one phase. This usecase uses a postprocessing playbook that ,for each user, generate its password and store it in the parameterStore into an AWS Account.|
+|[full-rds-example](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/full-rds-example/README.md)|In a context of a **RDS Instance**, deployed on **AWS**, Demonstrate an another postprocessing playbook that generate passwords into **AWS SecretsManager**, deploy the **pgaudit** extension for real-time audit system, a **shell script to retrieve audit logs**, create users inside database **by applying the least privilege pattern**.|
+|[lambda-stream-audit](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/lambda-stream-audit/README.md)|To finish the previous usecase, this example deploys a **lambda** function to stream audit logs. |
 
 ## Diagram
 
 The diagram below illustrate what we neeed to do : 
 
+<img src="./schemas/Diagram-Relations.png">
 
 <img src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAA7QAAALECAYAAAA4knzbAAAAAXNSR0IArs4c6QAAIABJREFUeF7s
 nQmc1dP//98pRdmFJJEt0iYRSvqKUhJRlhCRFlpoUUkpbSpliYo2KUtlLbSQkiR8syZayRLJVooo
@@ -1473,7 +1486,7 @@ rkJggg=="/>
 Notes : 
 
 * Roles are independent from the database and schema. But we advice to create the 3 roles (admin,readonly,write) for each database and do not shared roles accross databases. That why, in the examples, we prefixe the name of the role by `app`, a trigram that can easily differentiate role in real usecases. If you need a user with permissions on differents databases, a user can inherits permissions from several roles. By example, role "write" for a database A, role "read" for a database B.
-* We create 3 roles (admin,write,readonly) but you can be more granular. By example, splitting the role write into several write roles, allowing the permissions insert/update/delete only on specific tables. the security pattern `Least privilege` can be applied at this level.
+* We create 3 roles (admin,write,readonly) but you can be more granular. By example, splitting the role write into several write roles, allowing the permissions insert/update/delete only on specific tables. the security pattern `Least privilege` can be applied at this level. See `full-rds-example` to see how to do that with this module.
 
 ## schema public vs custom schema
 
@@ -1547,14 +1560,22 @@ you could find all Inputs & outputs of this submodule here : [docs](https://gith
 
 ### Prerequirements
 
-Those modules uses the excellent [postgresql provider](https://registry.terraform.io/providers/cyrilgdn/postgresql/latest/docs). for each usecase, you need to have : 
+Those modules uses the excellent [postgresql provider](https://registry.terraform.io/providers/cyrilgdn/postgresql/latest/docs). Because of the recent version that fixes bugs and introduces features, this module use the version **1.15.0** or higher. During my test, 
+
+
+
+
+for each usecase, you need to have : 
 
 * the network connectivity to your database (by example, if you launch your terraform scripts from a gitlab-ci runner, your runners must reach the database)
 * the credentials of a user with the required permissions to connect on a postgresql instance, to create database etc ... Often, we use postgres user for the postgresql provider, and a custom admin user for creating database and other objects. For the password, to avoid passing in clear text the password used by the postgresql provider, use the native postgresql mechanism by setting an environment variable **PGPASSWORD**.
 
+
 ### Tests environment
 
-You can find a docker-compose file to start locally a postgresql (version 13.4) database and set the password for postgres user. Use the command `docker-compose -f docker-compose.yml up -d`.  
+You can find a docker-compose file to start locally a postgresql (version 13.4) database and set the password for postgres user. Use the command `docker-compose -f docker-compose.yml up -d`.
+
+### Troubleshooting
 
 
 ## Acknowledgements
