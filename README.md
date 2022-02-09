@@ -11,11 +11,11 @@ Managing users means managing their `passwords`. It could be tricky if you want 
 
 ## Audit your database : PostgreSQL Audit Extension
 
-You can find official documentation here : https://www.pgaudit.org/#section_one
+You can find official documentation here : https://www.pgaudit.org/
 
 This module provides a way to deploy **extension** inside your postgresql engine. It's not specific to `pgaudit`, but can be used with other extensions, like `pg_stat_statements` or `aws_s3`. 
 Moreover, for a database deployed on the **public cloud AWS**, with the AWS Managed Service **RDS**, this module also provides a way to deploy an audit system allowing to trace all the requests made, by whom, at what time and from which IP address, ready to be streamed by a `SOC tool` like `ElasticSearch` or `Splunk`. This feature is implemented by :
-* the installation of `pgaudit` extension.
+* the installation of `pgaudit` extension in your postgresql engine.
 * the deployment of a `lambda` function that will stream the log produced by the pgaudit extension.
 * the lambda prints the audit log into a `cloudwatch log group` that can be easily indexed by your official SOC Tool.
 
@@ -1560,9 +1560,33 @@ you could find all Inputs & outputs of this submodule here : [docs](https://gith
 
 ### Prerequirements
 
-Those modules uses the excellent [postgresql provider](https://registry.terraform.io/providers/cyrilgdn/postgresql/latest/docs). Because of the recent version that fixes bugs and introduces features, this module use the version **1.15.0** or higher. During my test, 
+* Those modules uses the excellent [postgresql provider](https://registry.terraform.io/providers/cyrilgdn/postgresql/latest/docs) developed and maintained by @cyrilgdn. 
+This module use the version **1.15.0** or higher of this provider. in each `providers.tf` located in each example, you could find : 
 
+```
+terraform {
+  required_version = ">= 1.0.4"
+  required_providers {
+    postgresql = {
+      source  = "cyrilgdn/postgresql"
+      version = ">= 1.15.0"
+    }
+  }
+}
+```
 
+During my tests, i encountered some problems during init phase : 
+
+```
+╷
+│ Error: Failed to query available provider packages
+│
+│ Could not retrieve the list of available versions for provider cyrilgdn/postgresql: locked provider registry.terraform.io/cyrilgdn/postgresql 1.11.2 does not
+│ match configured version constraint >= 1.15.0; must use terraform init -upgrade to allow selection of new versions
+╵
+```
+
+after launching `terraform init -upgrade`, the init phase ends successfully.
 
 
 for each usecase, you need to have : 
@@ -1576,6 +1600,20 @@ for each usecase, you need to have :
 You can find a docker-compose file to start locally a postgresql (version 13.4) database and set the password for postgres user. Use the command `docker-compose -f docker-compose.yml up -d`.
 
 ### Troubleshooting
+
+Despite all my professionalism in the development of this module, I encountered some problems during my testing phase: 
+
+```
+╷
+│ Error: could not execute revoke query: pq: tuple concurrently updated
+│
+│   with module.initdb.postgresql_grant.revoke_create_public[0],
+│   on ../../create-database/db_objects.tf line 168, in resource "postgresql_grant" "revoke_create_public":
+│  168: resource "postgresql_grant" "revoke_create_public" {
+│
+╵
+```
+Depending of your latency, relaunch your apply and it will ends sucessfully.
 
 
 ## Acknowledgements
