@@ -13,18 +13,18 @@ Managing users means managing their `passwords`. It could be tricky if you want 
 
 You can find official documentation here : https://www.pgaudit.org/
 
-This module provides a way to deploy **extension** inside your postgresql engine. It's not specific to `pgaudit`, but can be used with other extensions, like `pg_stat_statements` or `aws_s3`. 
+This module provides a way to deploy **postgresql Extension** inside your postgresql engine. It's not specific to `pgaudit`, but can be used with other extensions, like `pg_stat_statements` or `aws_s3`. 
 Moreover, for a database deployed on the **public cloud AWS**, with the AWS Managed Service **RDS**, this module also provides a way to deploy an audit system allowing to trace all the requests made, by whom, at what time and from which IP address, ready to be streamed by a `SOC tool` like `ElasticSearch` or `Splunk`. This feature is implemented by :
 * the installation of `pgaudit` extension in your postgresql engine.
-* the deployment of a `lambda` function that will stream the log produced by the pgaudit extension.
-* the lambda prints the audit log into a `cloudwatch log group` that can be easily indexed by your official SOC Tool.
+* the deployment of a `lambda` function that will stream the log produced by the rds instance.
+* the lambda streams logs to a destination. The usecase `full-rds-example` illustrates that by sending log streams into an `elasticsearch domain`.
 
 ## Usecases & Sub-Modules
 
 The module is divided into 2 sub-modules and several examples that illustrates different aspects covered by this module.
 
 * The creation of the database with the roles and the permissions associated with (named `grant` inside postgresql).
-* The creation of the user. For security perspectives, user inherits permissions from role. A user should have an expiration date for his password.
+* The creation of the user. For security perspectives, user inherits permissions from role. For user, used by a `human`, its password should have an expiration date. For non-human users (used inside an application), a `rotation mechanism` should increase your security. Using `AWS SecretsManager' could help you to achieve this requirement.
 
 ## Usecases
 
@@ -33,11 +33,11 @@ The module is divided into 2 sub-modules and several examples that illustrates d
 |[simple-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/simple-database/README.md)|Demonstration How to create Database, Roles, and Grants objects.|
 |[create-users-on-existent-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/create-users-on-existent-database/README.md)|From an existent database, you can create several users. This usecase uses a trivial postprocessing playbook for example. **DO NOT USE THIS PLAYBOOK IN PRODUCTION, IT's NOT SAFE.**|
 |[all-in-one](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/all-in-one/README.md)|Demonstration How to create Database, Roles, Users in one phase. This usecase uses a postprocessing playbook that ,for each user, generate its password and store it in the parameterStore into an AWS Account.|
-|[full-rds-example](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/full-rds-example/README.md)|In a context of a **RDS Instance**, deployed on **AWS**, Demonstrate an another postprocessing playbook that generate passwords into **AWS SecretsManager**, deploy the **pgaudit** extension for real-time audit system, a **shell script to retrieve audit logs**, create users inside database **by applying the least privilege pattern**.|
+|[full-rds-example](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/full-rds-example/README.md)|In a context of the **public cloud AWS**, deployed into a **RDS Instance**, demonstrate an another postprocessing playbook that generate passwords into **AWS SecretsManager**, deploy the **pgaudit** extension for real-time audit system, a **shell script to retrieve audit logs**, create users inside database **by applying the least privilege pattern**.|
 
 ## Diagram
 
-The diagram below illustrate what we neeed to do : 
+By this simple example, the diagram below illustrates relations between roles and users and what we neeed to do : 
 
 <img src="./schemas/Diagram-Relations.png">
 
@@ -1475,16 +1475,16 @@ rkJggg=="/>
 
 |Actor|Remarks|
 |------|------|
-|The user `postgres` or the `super-user`|This user should not be used in daily tasks. Instead, create an admin role on which you delegate high level permissions.|
+|The user `postgres` or the `super-user`|This user **should not be used** in daily tasks. Instead, create an admin role on which you delegate high level permissions.|
 |Application admin Role|This role will be the owner of the database and all objects inside the database. It can create database,tables inside database and roles.|
 |ReadOnly Role|The role with grants that allowing select on tables.|
 |Write Role|The role with grants that allowing select/insert/update/delete on tables.|
-|The user `application reporting`| This user is used inside the reporting application.|
-|The user `application backend`| This user is used inside the backend application. |
+|The user `application reporting`| This user is used inside the reporting application. Readonly permissions are suffisent for reporting.|
+|The user `application backend`| This user is used inside the backend application. Write permissions are need for this application. |
 
 Notes : 
 
-* Roles are independent from the database and schema. But we advice to create the 3 roles (admin,readonly,write) for each database and do not shared roles accross databases. That why, in the examples, we prefixe the name of the role by `app`, a trigram that can easily differentiate role in real usecases. If you need a user with permissions on differents databases, a user can inherits permissions from several roles. By example, role "write" for a database A, role "read" for a database B.
+* Roles are independent from the database and schema. But we advice to create the 3 roles (admin,readonly,write) for each database and do not shared roles accross databases. That why, in examples provided in this module, we prefixe the name of the role by `app`, a trigram that can easily differentiate role in real usecases. If you need a user with permissions on differents databases, a user can inherits permissions from several roles. By example, role "write" for a database A, role "read" for a database B.
 * We create 3 roles (admin,write,readonly) but you can be more granular. By example, splitting the role write into several write roles, allowing the permissions insert/update/delete only on specific tables. the security pattern `Least privilege` can be applied at this level. See `full-rds-example` to see how to do that with this module.
 
 ## schema public vs custom schema
@@ -1517,7 +1517,7 @@ Working with a custom schema is available but keep in mind that :
 
 ## It's not a bug !
 
-If you create tables, apply this module by creating roles and permissions, with by example, the "write" permissions (insert/update/delete) on the tables, it works.
+If you create tables, apply this module by creating roles and permissions, with by example, the "write" permissions (insert/update/delete) on the tables, it works : the user that inherits write permissions can insert/update/delete lines in tables. 
 
 After the apply, if you create a new table, and try to insert lines into this table, you will have an error `Permission Denied`. It's not a bug. Because, the permissions put in the previous step are not retro-active. You need to re-execute the terraform apply to propagate permisisons (the write permissions) on the new table. 
 
@@ -1528,10 +1528,10 @@ After the apply, if you create a new table, and try to insert lines into this ta
 
 This sub-module is in charge to create : 
 
-* `postgresql database` : In some case, you need to create the database first.
+* `postgresql database` : The module can create for you, your database. But if the database already exists, you can just avoid this step.
 
 
-* `postgresql role` : following best practices, we will create `role` in a first step. Those roles will handle grants (=permissions).
+* `postgresql role` : following best practices, we will create `roles` in a first step. Those roles will handle grants (=permissions).
 
 
 * `postgresql grant` : the list of grants that will be associated to the role.
@@ -1545,21 +1545,21 @@ you could find all Inputs & outputs of this submodule here : [docs](https://gith
 
 This sub-module is in charge to create : 
 
-* `postgresql role` : a user is a role that inherits permissions from roles and have the option 'login' = true. A user can have an expiration date. It's a good practice to expire password for human users.
+* `postgresql role` : a user is a role that inherits permissions from roles and have the option `'login' = true`. A user can have an expiration date. It's a good practice to control password for human users by an expiration date.
 
 * Regarding `password management` inside a terraform module, it could be complex to manage properly passwords inside a generic module. You can refer to this excellent post to manage securly your passwords : https://blog.gruntwork.io/a-comprehensive-guide-to-managing-secrets-in-your-terraform-code-1d586955ace1. 
 * To provide a way to manage at posteriori the password of users created by the module, a system of `postprocessing playbook` is available to set the password securely. Why securely ? because it use a `terraform null_resource` to perform the update of the password in the database and to store the password in a safe place of your choice.
 
 
-check the [create-users-on-existent-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/create-users-on-existent-database) or [all-in-one](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/all-in-one) usecases to have complete examples.
+check the [create-users-on-existent-database](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/create-users-on-existent-database),  [all-in-one](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/all-in-one) or [full-rds-example](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/examples/fill-rds-example) usecases to have complete examples.
 
-you could find all Inputs & outputs of this submodule here : [docs](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/create-users/README.md)
+you could find all Inputs & outputs of this submodule here : [docs](https://github.com/jparnaudeau/terraform-postgresql-database-admin/tree/master/create-users/README.md).
 
 
 
 ### Prerequirements
 
-* Those modules uses the excellent [postgresql provider](https://registry.terraform.io/providers/cyrilgdn/postgresql/latest/docs) developed and maintained by @cyrilgdn. 
+* This module uses the excellent [postgresql provider](https://registry.terraform.io/providers/cyrilgdn/postgresql/latest/docs) developed and maintained by @cyrilgdn. 
 This module use the version **1.15.0** or higher of this provider. in each `providers.tf` located in each example, you could find : 
 
 ```
@@ -1580,7 +1580,8 @@ During my tests, i encountered some problems during init phase :
 ╷
 │ Error: Failed to query available provider packages
 │
-│ Could not retrieve the list of available versions for provider cyrilgdn/postgresql: locked provider registry.terraform.io/cyrilgdn/postgresql 1.11.2 does not
+│ Could not retrieve the list of available versions for provider cyrilgdn/postgresql: 
+| locked provider registry.terraform.io/cyrilgdn/postgresql 1.11.2 does not
 │ match configured version constraint >= 1.15.0; must use terraform init -upgrade to allow selection of new versions
 ╵
 ```
@@ -1588,10 +1589,10 @@ During my tests, i encountered some problems during init phase :
 after launching `terraform init -upgrade`, the init phase ends successfully.
 
 
-for each usecase, you need to have : 
+Keep in mind that you need to have : 
 
 * the network connectivity to your database (by example, if you launch your terraform scripts from a gitlab-ci runner, your runners must reach the database)
-* the credentials of a user with the required permissions to connect on a postgresql instance, to create database etc ... Often, we use postgres user for the postgresql provider, and a custom admin user for creating database and other objects. For the password, to avoid passing in clear text the password used by the postgresql provider, use the native postgresql mechanism by setting an environment variable **PGPASSWORD**.
+* the credentials of a user with the required permissions to connect on a postgresql instance, to create database etc ... Often, we use postgres user or superuser for the postgresql provider. According to best practices, this superuser is used to create "admin user" that will be used to create database oher objects. For the password of the user defined into the postgresql provider, to avoid passing in clear text the password, use the native postgresql mechanism by setting an environment variable **PGPASSWORD**.
 
 
 ### Tests environment

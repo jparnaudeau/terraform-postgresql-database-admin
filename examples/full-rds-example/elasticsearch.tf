@@ -89,3 +89,16 @@ resource "aws_iam_role_policy" "lambda-policy" {
   role   = aws_iam_role.subscriptionfilter-role[0].id
   policy = data.aws_iam_policy_document.lambda-policy.json
 }
+
+
+###########################################
+# Deploy a subscription filter on RDS Logs
+###########################################
+// resource "aws_cloudwatch_log_subscription_filter" "rds_cw_subscription" {
+//   #count           = var.create_elasticsearch ? 1 : 0
+//   name            = format("subsr-%s-%s-logs",var.environment,var.rds_name)
+//   #role_arn        = aws_iam_role.subscriptionfilter-role[0].id
+//   log_group_name  = format("/aws/rds/instance/%s/postgresql",var.rds_name)
+//   filter_pattern  = "[date, time, misc, message]"
+//   destination_arn = module.elasticsearch.domain_arn
+// }
