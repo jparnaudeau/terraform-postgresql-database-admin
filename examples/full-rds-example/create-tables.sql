@@ -1,8 +1,8 @@
 CREATE TABLE product (
     id SERIAL PRIMARY KEY,
-    label text NOT NULL,
-    owner text NOT NULL,
-    cost numeric(5,2) NOT NULL,
+    label TEXT NOT NULL,
+    owner TEXT NOT NULL,
+    cost NUMERIC(5,2) NOT NULL,
     time DATE NOT NULL DEFAULT current_timestamp
 );
 
@@ -22,10 +22,15 @@ CREATE INDEX idx_Customer_lastname ON Customer(lastname);
 
 CREATE TABLE Basket (
     id SERIAL PRIMARY KEY,
-    customer_id int not null,
-    product_id int not null,
-    quantity int not null,
+    customer_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL,
     CONSTRAINT fk_customer FOREIGN KEY(customer_id) REFERENCES Customer(id),
     CONSTRAINT fk_product FOREIGN KEY(product_id)  REFERENCES Product(id)
 );
 
+CREATE TABLE stats(
+    id SERIAL PRIMARY KEY,
+    domain TEXT NOT NULL,
+    value NUMERIC(8,2)
+);

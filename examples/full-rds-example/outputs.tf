@@ -1,3 +1,6 @@
+##########################################
+# Outputs for VPC
+##########################################
 output "vpc_infos" {
   description = "map of vpc informations"
   value = {
@@ -9,6 +12,9 @@ output "vpc_infos" {
   }
 }
 
+################################################
+#  Outputs for RDS
+################################################
 output "rds_infos" {
   description = "map of rds informations"
   value = {
@@ -20,7 +26,6 @@ output "rds_infos" {
     "connect_command"    = format("psql -h %s -p %s -U %s -d %s -W", module.rds.db_instance_address, var.dbport, var.rds_superuser_name, var.inputs["db_name"])
   }
 }
-
 
 output "affected_schema" {
   description = "the name of the schema in which the db objects have been created by the module"
@@ -41,4 +46,46 @@ output "db_users" {
       "connect_command"               = format("psql -h %s -p %s -U %s -d %s -W", module.rds.db_instance_address, var.dbport, user.name, var.inputs["db_name"])
     }
   }
+}
+
+################################################
+#  Outputs for elasticSearch
+################################################
+output "domain_arn" {
+  description = "The ElasticSearch Domain ARN"
+  value       = try(module.elasticsearch.domain_arn,"")
+}
+
+output "domain_endpoint" {
+  description = "The ElasticSearch Domain Endpoint"
+  value       = try(module.elasticsearch.domain_endpoint,"")
+}
+output "domain_hostname" {
+  description = "The ElasticSearch Domain Hostname"
+  value       = try(module.elasticsearch.domain_hostname,"")
+}
+output "domain_id" {
+  description = "The ElasticSearch Domain Id"
+  value       = try(module.elasticsearch.domain_id,"")
+}
+output "domain_name" {
+  description = "The ElasticSearch Domain Name"
+  value       = try(module.elasticsearch.domain_name,"")
+}
+output "elasticsearch_user_iam_role_arn" {
+  description = "The ElasticSearch User IAM Role ARN"
+  value       = try(module.elasticsearch.elasticsearch_user_iam_role_arn,"")
+}
+output "elasticsearch_user_iam_role_name" {
+  description = "The ElasticSearch User IAM Role Name"
+  value       = try(module.elasticsearch.elasticsearch_user_iam_role_name,"")
+}
+output "kibana_endpoint" {
+  description = "The ElasticSearch Kibana Endpoint"
+  value       = try(module.elasticsearch.kibana_endpoint,"")
+}
+
+output "subscription_filter_role_arn" {
+  description = "The ARN to use when subscription is created"
+  value       = try(aws_iam_role.subscriptionfilter-role[0].arn,"")
 }

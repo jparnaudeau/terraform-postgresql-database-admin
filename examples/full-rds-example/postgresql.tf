@@ -108,7 +108,7 @@ module "create_users" {
       REGION   = data.aws_region.current.name
       RDS_NAME = var.rds_name
     }
-    refresh_passwords = ["all"]
+    refresh_passwords = var.refresh_passwords
     shell_name        = "./gen-password-in-secretsmanager.py"
   }
 

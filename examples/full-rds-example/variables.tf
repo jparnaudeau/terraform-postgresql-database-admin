@@ -177,3 +177,36 @@ variable "recovery_window_in_days" {
   description = "delay in days during a secret can be recoverd"
   default     = 7
 }
+
+variable "refresh_passwords" {
+  type        = list(string)
+  description = "The list of users that we want refresh its password. Default '[all]'"
+  default     = ["all"]
+}
+
+########################################
+# define variables for ElasticSearch
+########################################
+variable "create_elasticsearch" {
+  type        = bool
+  description = "Enable or Not the creation of an elasticSearch to simulate a SOC Tool"
+  default     = false
+}
+
+variable "es_instance_type" {
+  type        = string
+  description = "InstanceType for ElasticSearch Node"
+  default     = "t3.small.elasticsearch"
+}
+
+variable "es_instance_count" {
+  type        = number
+  description = "Number of instances in the ElasticSearch Domain"
+  default     = 1
+}
+
+variable "es_ebs_volume_size" {
+  type        = number
+  description = "EBS Size associated to each node in the ElasticSearch Domain"
+  default     = 10
+}

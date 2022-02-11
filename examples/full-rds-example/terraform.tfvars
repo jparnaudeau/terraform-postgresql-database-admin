@@ -50,7 +50,7 @@ inputs = {
     { object_type = "sequence", privileges = ["SELECT", "USAGE"], objects = [], role = "app_readonly_role", owner_role = "app_admin_role", grant_option = false },
 
     # define grants for app_writeweb_role
-    # - access in Read/Write on tables "customer" & "Basket"
+    # - access in Read/Write on tables "customer" & "basket"
     # - access in Read on table "Product"
     { object_type = "database", privileges = ["CONNECT"], objects = [], role = "app_writeweb_role", owner_role = "app_admin_role", grant_option = false },
     { object_type = "type", privileges = ["USAGE"], objects = [], role = "app_writeweb_role", owner_role = "app_admin_role", grant_option = true },
@@ -60,11 +60,11 @@ inputs = {
     { object_type = "function", privileges = ["EXECUTE"], objects = [], role = "app_writeweb_role", owner_role = "app_admin_role", grant_option = false },
 
      # define grants for app_writebo_role
-     # - access in Read/Write on table "Product"
-     # - access in Read on table "Customer" & "Basket"
+     # - access in Read/Write on table "product" & "stats"
+     # - access in Read on table "customer" & "basket"
     { object_type = "database", privileges = ["CONNECT"], objects = [], role = "app_writebo_role", owner_role = "app_admin_role", grant_option = false },
     { object_type = "type", privileges = ["USAGE"], objects = [], role = "app_writebo_role", owner_role = "app_admin_role", grant_option = true },
-    { object_type = "table", privileges = ["SELECT", "REFERENCES", "TRIGGER", "INSERT", "UPDATE", "DELETE"], objects = ["product"], role = "app_writebo_role", owner_role = "app_admin_role", grant_option = false },
+    { object_type = "table", privileges = ["SELECT", "REFERENCES", "TRIGGER", "INSERT", "UPDATE", "DELETE"], objects = ["product","stats"], role = "app_writebo_role", owner_role = "app_admin_role", grant_option = false },
     { object_type = "table", privileges = ["SELECT", "REFERENCES", "TRIGGER"], objects = ["customer","basket"], role = "app_writebo_role", owner_role = "app_admin_role", grant_option = false },
     { object_type = "sequence", privileges = ["SELECT", "USAGE"], objects = [], role = "app_writebo_role", owner_role = "app_admin_role", grant_option = false },
     { object_type = "function", privileges = ["EXECUTE"], objects = [], role = "app_writebo_role", owner_role = "app_admin_role", grant_option = false },
@@ -78,6 +78,9 @@ inputs = {
   ]
 
 }
+
+# Do not refresh passwords
+refresh_passwords=[""]
 
 # set tags & environment
 environment = "test"
@@ -127,3 +130,12 @@ extensions_parameter_group_params = {
   "pgaudit.log_level"          = "info",
   "pgaudit.log_statement_once" = "1"
 }
+
+################################################
+# ElasticSearch
+################################################
+create_elasticsearch = false
+es_instance_type     = "t3.small.elasticsearch"
+es_instance_count    = 1
+es_ebs_volume_size   = 10
+ 
