@@ -68,7 +68,7 @@ resource "random_password" "passwords" {
 module "create_users" {
 
   source  = "jparnaudeau/database-admin/postgresql//create-users"
-  version = "1.0.6"
+  version = "2.0.0"
 
   # set the provider
   providers = {

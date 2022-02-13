@@ -14,10 +14,10 @@ module "elasticsearch" {
   enabled = var.create_elasticsearch
 
   #naming
-  namespace               = "soc"
-  stage                   = var.environment
-  name                    = "es"
-  
+  namespace = "soc"
+  stage     = var.environment
+  name      = "es"
+
   # config
   vpc_enabled                    = false
   zone_awareness_enabled         = false
@@ -25,7 +25,7 @@ module "elasticsearch" {
   instance_type                  = var.es_instance_type
   instance_count                 = var.es_instance_count
   ebs_volume_size                = var.es_ebs_volume_size
-  iam_role_arns                  = [""]   # Allow anonymous access
+  iam_role_arns                  = [""] # Allow anonymous access
   iam_actions                    = ["es:ESHttpGet", "es:ESHttpPut", "es:ESHttpPost"]
   encrypt_at_rest_enabled        = "true"
   kibana_subdomain_name          = "kibana-soc"
@@ -53,8 +53,8 @@ data "aws_iam_policy_document" "lambda-assume-role-policy" {
   }
 }
 resource "aws_iam_role" "subscriptionfilter-role" {
-  count       = var.create_elasticsearch ? 1 : 0
-  name        = format("role-%s-subscriptionfilter-rds-audit",var.environment)
+  count              = var.create_elasticsearch ? 1 : 0
+  name               = format("role-%s-subscriptionfilter-rds-audit", var.environment)
   assume_role_policy = data.aws_iam_policy_document.lambda-assume-role-policy.json
 }
 
@@ -62,22 +62,22 @@ resource "aws_iam_role" "subscriptionfilter-role" {
 ## Policy
 data "aws_iam_policy_document" "lambda-policy" {
   statement {
-    sid = "AWSLambdaVPCAccessExecutionRole"
+    sid    = "AWSLambdaVPCAccessExecutionRole"
     effect = "Allow"
     actions = [
-        "logs:Create*",
-        "logs:Describe*",
-        "es:ESHttpPost"
+      "logs:Create*",
+      "logs:Describe*",
+      "es:ESHttpPost"
     ]
     resources = ["*"]
   }
   statement {
-    sid = "AWSLambdaBasicExecutionRole"
+    sid    = "AWSLambdaBasicExecutionRole"
     effect = "Allow"
     actions = [
-        "logs:CreateLogStream",
-        "logs:Put*",
-        "logs:FilterLogEvents"
+      "logs:CreateLogStream",
+      "logs:Put*",
+      "logs:FilterLogEvents"
     ]
     resources = ["arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:log-group:*"]
   }
@@ -85,7 +85,7 @@ data "aws_iam_policy_document" "lambda-policy" {
 
 resource "aws_iam_role_policy" "lambda-policy" {
   count  = var.create_elasticsearch ? 1 : 0
-  name   = format("policy-%s-subscription-lambda-policy",var.environment)
+  name   = format("policy-%s-subscription-lambda-policy", var.environment)
   role   = aws_iam_role.subscriptionfilter-role[0].id
   policy = data.aws_iam_policy_document.lambda-policy.json
 }

@@ -29,8 +29,8 @@ CREATE TABLE Basket (
     CONSTRAINT fk_product FOREIGN KEY(product_id)  REFERENCES Product(id)
 );
 
-CREATE TABLE stats(
+CREATE TABLE Stats(
     id SERIAL PRIMARY KEY,
-    domain TEXT NOT NULL,
+    product TEXT NOT NULL,
     value NUMERIC(8,2)
 );

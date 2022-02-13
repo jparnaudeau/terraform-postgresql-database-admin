@@ -154,17 +154,12 @@ variable "rds_superuser_name" {
 variable "rds_root_password" {
   type        = string
   description = "Password for RDS super-user"
+  sensitive   = true
 }
 
 variable "parameter_group_params" {
   type        = map(any)
   description = "custom parameter group instance params"
-  default     = {}
-}
-
-variable "extensions_parameter_group_params" {
-  type        = map(any)
-  description = "custom parameter group instance params with apply_method 'pending_reboot'"
   default     = {}
 }
 

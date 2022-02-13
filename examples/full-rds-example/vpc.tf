@@ -14,9 +14,9 @@ module "vpc" {
   database_subnets = var.vpc_database_subnets
 
   create_database_subnet_group = false
-  
-  enable_dns_hostnames         = true
-  enable_dns_support           = true
+
+  enable_dns_hostnames = true
+  enable_dns_support   = true
 
   tags = local.tags
 }
