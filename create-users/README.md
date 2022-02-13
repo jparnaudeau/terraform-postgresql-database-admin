@@ -2,10 +2,9 @@
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.15 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 2.70, < 4 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.4 |
 | <a name="requirement_null"></a> [null](#requirement\_null) | >= 3.0.0 |
-| <a name="requirement_postgresql"></a> [postgresql](#requirement\_postgresql) | >= 1.11.0 |
+| <a name="requirement_postgresql"></a> [postgresql](#requirement\_postgresql) | >= 1.15.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.0.0 |
 
 ## Providers
@@ -13,7 +12,7 @@
 | Name | Version |
 |------|---------|
 | <a name="provider_null"></a> [null](#provider\_null) | >= 3.0.0 |
-| <a name="provider_postgresql"></a> [postgresql](#provider\_postgresql) | >= 1.11.0 |
+| <a name="provider_postgresql"></a> [postgresql](#provider\_postgresql) | >= 1.15.0 |
 
 ## Modules
 
