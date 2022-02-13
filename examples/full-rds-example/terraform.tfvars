@@ -107,7 +107,7 @@ rds_family                = "postgres13"
 rds_instance_class        = "db.t3.micro"
 rds_allocated_storage     = 10
 rds_max_allocated_storage = 20
-allowed_ip_addresses      = ["88.164.184.133/32","62.129.12.90/32"]
+allowed_ip_addresses      = ["X.X.X.X/32"] # your personal Outbound IP Address
 
 
 # define parameter groups for our RDS, apply_method = "immediate"
