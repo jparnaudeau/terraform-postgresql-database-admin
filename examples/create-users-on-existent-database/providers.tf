@@ -23,3 +23,17 @@ provider "postgresql" {
   superuser        = var.superuser
   expected_version = var.expected_version
 }
+
+
+#######################################
+# Manage version of providers
+#######################################
+terraform {
+  required_version = ">= 1.0.4"
+  required_providers {
+    postgresql = {
+      source  = "cyrilgdn/postgresql"
+      version = ">= 1.15.0"
+    }
+  }
+}

@@ -117,11 +117,12 @@ resource "postgresql_grant" "grant_roles_schema" {
 resource "postgresql_grant" "privileges" {
 
   for_each = { for tuple in var.inputs["db_grants"] :
-  join("_", [tuple.role, tuple.object_type, "privs"]) => tuple if tuple.object_type != "type" }
+  join("_", [tuple.role, tuple.object_type, "privs", join(",",tuple.objects)]) => tuple if tuple.object_type != "type" }
 
   database          = var.inputs["db_name"]
   schema            = var.inputs["db_schema_name"]
   role              = each.value.role
+  objects           = try(each.value.objects, [])
   object_type       = each.value.object_type
   privileges        = each.value.privileges
   with_grant_option = each.value.grant_option
@@ -140,7 +141,7 @@ resource "postgresql_grant" "privileges" {
 resource "postgresql_default_privileges" "alter_defaults_privs" {
 
   for_each = { for tuple in var.inputs["db_grants"] :
-    join("_", [tuple.role, tuple.object_type, "defaults", "privs"]) => tuple if tuple.object_type != "database"
+    join("_", [tuple.role, tuple.object_type, "defaults", "privs", join(",",tuple.objects)]) => tuple if tuple.object_type != "database"
   }
 
   database    = var.inputs["db_name"]
@@ -175,6 +176,7 @@ resource "postgresql_grant" "revoke_create_public" {
 
   depends_on = [
     postgresql_schema.schema,
-    postgresql_database.db
+    postgresql_database.db,
+    postgresql_grant.privileges
   ]
 }
