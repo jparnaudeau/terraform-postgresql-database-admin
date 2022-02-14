@@ -3,6 +3,25 @@
 ########################################
 data "aws_caller_identity" "current" {}
 
+#########################################
+# Because of a cyclic dependency, we need to 
+# create the role of the lambda.
+#########################################
+resource "aws_iam_role" "lambda-role" {
+  name               = format("role-%s-%s", var.environment, local.lambda_function_name)
+  assume_role_policy = file("${path.module}/policies/lambda_role.json")
+}
+
+resource "aws_iam_role_policy" "lambda-policy" {
+  name = format("policy-%s-%s", var.environment, local.lambda_function_name)
+  role = aws_iam_role.lambda-role.id
+  policy = templatefile("${path.module}/policies/lambda_policy.tpl", {
+    account_id = data.aws_caller_identity.current.account_id,
+    region     = var.region
+  })
+}
+
+
 ###########################################
 # Deploy an ElasticSearch Cluster
 ###########################################
@@ -19,13 +38,14 @@ module "elasticsearch" {
   name      = "es"
 
   # config
-  vpc_enabled                    = false
-  zone_awareness_enabled         = false
-  elasticsearch_version          = "7.4"
-  instance_type                  = var.es_instance_type
-  instance_count                 = var.es_instance_count
-  ebs_volume_size                = var.es_ebs_volume_size
-  iam_role_arns                  = [""] # Allow anonymous access
+  vpc_enabled            = false
+  zone_awareness_enabled = false
+  elasticsearch_version  = "7.4"
+  instance_type          = var.es_instance_type
+  instance_count         = var.es_instance_count
+  ebs_volume_size        = var.es_ebs_volume_size
+  # because of a cyclic dependencies, create in a first step the elasticsearch without allowing the role of the lambda streaming 
+  iam_role_arns                  = [aws_iam_role.lambda-role.arn]
   iam_actions                    = ["es:ESHttpGet", "es:ESHttpPut", "es:ESHttpPost"]
   encrypt_at_rest_enabled        = "true"
   kibana_subdomain_name          = "kibana-soc"
@@ -38,67 +58,25 @@ module "elasticsearch" {
 }
 
 ###########################################
-# Deploy a Role with appropriate permissions
-# to allow the underlying lambda used by subscription
+# Deploy a subscription filter on RDS CloudWatch Logs
+# to stream logs on an ElasticSearch domain endpoint
 ###########################################
-## Role
-data "aws_iam_policy_document" "lambda-assume-role-policy" {
-  statement {
-    actions = ["sts:AssumeRole"]
+module "stream2es" {
+  source  = "jparnaudeau/cloudwatch-subscription-elasticsearch/aws"
+  version = "1.0.0"
 
-    principals {
-      type        = "Service"
-      identifiers = ["lambda.amazonaws.com"]
-    }
-  }
+  for_each = var.create_elasticsearch ? toset(["1"]) : []
+
+  # gloval variables
+  region      = var.region
+  environment = var.environment
+  tags        = local.tags
+
+  # other variables
+  function_name           = local.lambda_function_name
+  rds_name                = var.rds_name
+  rds_cloudwatch_log_name = format("/aws/rds/instance/%s/postgresql", var.rds_name)
+  es_domain_endpoint      = try(module.elasticsearch.domain_endpoint, "")
+  source_account_id       = data.aws_caller_identity.current.account_id
+  lambda_role_arn         = aws_iam_role.lambda-role.arn
 }
-resource "aws_iam_role" "subscriptionfilter-role" {
-  count              = var.create_elasticsearch ? 1 : 0
-  name               = format("role-%s-subscriptionfilter-rds-audit", var.environment)
-  assume_role_policy = data.aws_iam_policy_document.lambda-assume-role-policy.json
-}
-
-
-## Policy
-data "aws_iam_policy_document" "lambda-policy" {
-  statement {
-    sid    = "AWSLambdaVPCAccessExecutionRole"
-    effect = "Allow"
-    actions = [
-      "logs:Create*",
-      "logs:Describe*",
-      "es:ESHttpPost"
-    ]
-    resources = ["*"]
-  }
-  statement {
-    sid    = "AWSLambdaBasicExecutionRole"
-    effect = "Allow"
-    actions = [
-      "logs:CreateLogStream",
-      "logs:Put*",
-      "logs:FilterLogEvents"
-    ]
-    resources = ["arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:log-group:*"]
-  }
-}
-
-resource "aws_iam_role_policy" "lambda-policy" {
-  count  = var.create_elasticsearch ? 1 : 0
-  name   = format("policy-%s-subscription-lambda-policy", var.environment)
-  role   = aws_iam_role.subscriptionfilter-role[0].id
-  policy = data.aws_iam_policy_document.lambda-policy.json
-}
-
-
-###########################################
-# Deploy a subscription filter on RDS Logs
-###########################################
-// resource "aws_cloudwatch_log_subscription_filter" "rds_cw_subscription" {
-//   #count           = var.create_elasticsearch ? 1 : 0
-//   name            = format("subsr-%s-%s-logs",var.environment,var.rds_name)
-//   #role_arn        = aws_iam_role.subscriptionfilter-role[0].id
-//   log_group_name  = format("/aws/rds/instance/%s/postgresql",var.rds_name)
-//   filter_pattern  = "[date, time, misc, message]"
-//   destination_arn = module.elasticsearch.domain_arn
-// }

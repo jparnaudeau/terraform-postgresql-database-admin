@@ -1,7 +1,3 @@
-# provider connection infos
-expected_version = "12.0.0"
-sslmode          = "disable"
-
 # database and objects creation
 inputs = {
 
@@ -12,7 +8,7 @@ inputs = {
 
   # install extensions if needed
   extensions = ["pgaudit"]
-  
+
   # CREATE ROLE
   db_roles = [
     { id = "admin", role = "app_admin_role", inherit = true, login = false, validity = "infinity", privileges = ["USAGE", "CREATE"], createrole = true },
@@ -63,7 +59,7 @@ rds_family                = "postgres13"
 rds_instance_class        = "db.t3.micro"
 rds_allocated_storage     = 10
 rds_max_allocated_storage = 20
-allowed_ip_addresses      = ["88.164.184.133/32"] # your personal Outbound IP Address
+allowed_ip_addresses      = ["X.X.X.X/32"] # your personal Outbound IP Address
 rds_superuser_name        = "root"
 
 # define parameter groups for our RDS, apply_method = "immediate"

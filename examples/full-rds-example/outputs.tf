@@ -41,9 +41,9 @@ output "db_users" {
   description = "The list of users created by the module"
   value = { for user in var.inputs["db_users"] :
     user.name => {
-      "parameter_store_user"          = format("%s/%s_user", local.namespace, user.name),
-      "parameter_store_user_password" = format("%s/%s_password", local.namespace, user.name),
-      "connect_command"               = format("psql -h %s -p %s -U %s -d %s -W", module.rds.db_instance_address, var.dbport, user.name, var.inputs["db_name"])
+      "secret_name"     = join(",", keys(module.secrets-manager[user.name].secret_arns)),
+      "secret_arn"      = join(",", values(module.secrets-manager[user.name].secret_arns)),
+      "connect_command" = format("psql -h %s -p %s -U %s -d %s -W", module.rds.db_instance_address, var.dbport, user.name, var.inputs["db_name"])
     }
   }
 }
@@ -85,7 +85,20 @@ output "kibana_endpoint" {
   value       = try(module.elasticsearch.kibana_endpoint, "")
 }
 
-output "subscription_filter_role_arn" {
-  description = "The ARN to use when subscription is created"
-  value       = try(aws_iam_role.subscriptionfilter-role[0].arn, "")
+################################################
+#  Outputs for streaming lambda
+################################################
+output "streaming_lambda_arn" {
+  description = "The Lambda ARN responsible of streaming RDS Logs to ElasticSearch"
+  value       = try(module.stream2es["1"].lambda_function_arn, "Not Deploy")
+}
+
+output "streamed_cloudwatch_log_arn" {
+  description = "The CloudWatch Log ARN being streamed by the lambda"
+  value       = try(module.stream2es["1"].streamed_cloudwatch_log_arn, "Not Deploy")
+}
+
+output "streaming_lambda_role_arn" {
+  description = "The Role ARN of the streaming lambda"
+  value       = aws_iam_role.lambda-role.arn
 }

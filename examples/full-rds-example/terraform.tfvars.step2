@@ -1,7 +1,3 @@
-# provider connection infos
-expected_version = "12.0.0"
-sslmode          = "disable"
-
 # database and objects creation
 inputs = {
 
@@ -62,11 +58,11 @@ inputs = {
 
     # define grants for app_writebo_role
     # - access in Read/Write on table "product"
-    # - access in Read on table "customer" & "basket"
+    # - access in Read on table "customer", "basket", "stats"
     { object_type = "database", privileges = ["CONNECT"], objects = [], role = "app_writebo_role", owner_role = "app_admin_role", grant_option = false },
     { object_type = "type", privileges = ["USAGE"], objects = [], role = "app_writebo_role", owner_role = "app_admin_role", grant_option = false },
-    { object_type = "table", privileges = ["SELECT", "REFERENCES", "TRIGGER", "INSERT", "UPDATE", "DELETE"], objects = ["product", "stats"], role = "app_writebo_role", owner_role = "app_admin_role", grant_option = false },
-    { object_type = "table", privileges = ["SELECT", "REFERENCES", "TRIGGER"], objects = ["customer", "basket"], role = "app_writebo_role", owner_role = "app_admin_role", grant_option = false },
+    { object_type = "table", privileges = ["SELECT", "REFERENCES", "TRIGGER", "INSERT", "UPDATE", "DELETE"], objects = ["product"], role = "app_writebo_role", owner_role = "app_admin_role", grant_option = false },
+    { object_type = "table", privileges = ["SELECT", "REFERENCES", "TRIGGER"], objects = ["customer", "basket", "stats"], role = "app_writebo_role", owner_role = "app_admin_role", grant_option = false },
     { object_type = "sequence", privileges = ["SELECT", "USAGE"], objects = [], role = "app_writebo_role", owner_role = "app_admin_role", grant_option = false },
     { object_type = "function", privileges = ["EXECUTE"], objects = [], role = "app_writebo_role", owner_role = "app_admin_role", grant_option = false },
 
@@ -87,13 +83,13 @@ inputs = {
     { name = "web", inherit = true, login = true, membership = ["app_writeweb_role"], validity = "infinity", connection_limit = -1, createrole = false },
     { name = "backoffice", inherit = true, login = true, membership = ["app_writebo_role"], validity = "infinity", connection_limit = -1, createrole = false },
     { name = "batch", inherit = true, login = true, membership = ["app_writebatch_role"], validity = "infinity", connection_limit = -1, createrole = false },
-    { name = "jparnaudeau", inherit = true, login = true, membership = ["app_readonly_role"], validity = "2022-07-31 00:00:00+00", connection_limit = -1, createrole = false },
+    { name = "lemmy", inherit = true, login = true, membership = ["app_readonly_role"], validity = "2022-07-31 00:00:00+00", connection_limit = -1, createrole = false },
   ]
 
 }
 
 # Refresh or not refresh passwords
-refresh_passwords = ["all"]
+refresh_passwords = [""]
 
 # set tags & environment
 environment = "test"
@@ -121,7 +117,7 @@ rds_family                = "postgres13"
 rds_instance_class        = "db.t3.micro"
 rds_allocated_storage     = 10
 rds_max_allocated_storage = 20
-allowed_ip_addresses      = ["88.164.184.133/32"] # your personal Outbound IP Address
+allowed_ip_addresses      = ["X.X.X.X/32"] # your personal Outbound IP Address
 rds_superuser_name        = "root"
 
 # define parameter groups for our RDS, apply_method = "immediate"
@@ -149,8 +145,7 @@ parameter_group_params = {
 ################################################
 # ElasticSearch
 ################################################
-create_elasticsearch = false
+create_elasticsearch = true
 es_instance_type     = "t3.small.elasticsearch"
 es_instance_count    = 1
 es_ebs_volume_size   = 10
- 
