@@ -23,7 +23,7 @@ module "initdb" {
   inputs          = var.inputs
 
   # because the superuser is not "postgres", need to set it in the module
-  default_superusers_list = ["postgres", var.rds_superuser_name]
+  default_superusers_list = [var.rds_superuser_name]
 }
 
 ####################################################################

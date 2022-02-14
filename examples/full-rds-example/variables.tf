@@ -28,7 +28,7 @@ variable "superuser" {
 variable "expected_version" {
   type        = string
   description = "Specify a hint to Terraform regarding the expected version that the provider will be talking with. This is a required hint in order for Terraform to talk with an ancient version of PostgreSQL. This parameter is expected to be a PostgreSQL Version or current. Once a connection has been established, Terraform will fingerprint the actual version. Default: 9.0.0"
-  default     = "9.0.0"
+  default     = "12.0.0"
 }
 
 ########################################
@@ -154,17 +154,12 @@ variable "rds_superuser_name" {
 variable "rds_root_password" {
   type        = string
   description = "Password for RDS super-user"
+  sensitive   = true
 }
 
 variable "parameter_group_params" {
   type        = map(any)
   description = "custom parameter group instance params"
-  default     = {}
-}
-
-variable "extensions_parameter_group_params" {
-  type        = map(any)
-  description = "custom parameter group instance params with apply_method 'pending_reboot'"
   default     = {}
 }
 

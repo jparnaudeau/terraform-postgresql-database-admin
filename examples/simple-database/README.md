@@ -46,7 +46,7 @@ Note : the password of the `var.pgadmin_user` are stored in the environment vari
 module "initdb" {
 
   source  = "jparnaudeau/database-admin/postgresql//create-database"
-  version = "1.0.6"
+  version = "2.0.0"
 
   # set the provider
   providers = {
@@ -109,21 +109,21 @@ inputs = {
   # Note object_type = "type" is used only for default privileges
   db_grants = [
     # role app_admin_role : define grants to apply on db 'mydatabase', schema 'public'
-    { object_type = "database", privileges = ["CREATE", "CONNECT", "TEMPORARY"], role = "app_admin_role", owner_role = "postgres", grant_option = true },
-    { object_type = "type", privileges = ["USAGE"], role = "app_admin_role", owner_role = "postgres", grant_option = true },
+    { object_type = "database", privileges = ["CREATE", "CONNECT", "TEMPORARY"], objects = [],  role = "app_admin_role", owner_role = "postgres", grant_option = true },
+    { object_type = "type", privileges = ["USAGE"], objects = [], role = "app_admin_role", owner_role = "postgres", grant_option = true },
 
     # role app_readonly_role : define grant to apply on db 'mydatabase', schema 'public'  
-    { object_type = "database", privileges = ["CONNECT"], role = "app_readonly_role", owner_role = "app_admin_role", grant_option = false },
-    { object_type = "type", privileges = ["USAGE"], role = "app_readonly_role", owner_role = "app_admin_role", grant_option = true },
-    { object_type = "table", privileges = ["SELECT", "REFERENCES", "TRIGGER"], role = "app_readonly_role", owner_role = "app_admin_role", grant_option = false },
-    { object_type = "sequence", privileges = ["SELECT", "USAGE"], role = "app_readonly_role", owner_role = "app_admin_role", grant_option = false },
+    { object_type = "database", privileges = ["CONNECT"], objects = [], role = "app_readonly_role", owner_role = "app_admin_role", grant_option = false },
+    { object_type = "type", privileges = ["USAGE"], objects = [], role = "app_readonly_role", owner_role = "app_admin_role", grant_option = true },
+    { object_type = "table", privileges = ["SELECT", "REFERENCES", "TRIGGER"], objects = [], role = "app_readonly_role", owner_role = "app_admin_role", grant_option = false },
+    { object_type = "sequence", privileges = ["SELECT", "USAGE"], objects = [], role = "app_readonly_role", owner_role = "app_admin_role", grant_option = false },
 
     # role app_write_role : define grant to apply on db 'mydatabase', schema 'public'
-    { object_type = "database", privileges = ["CONNECT"], role = "app_write_role", owner_role = "app_admin_role", grant_option = false },
-    { object_type = "type", privileges = ["USAGE"], role = "app_write_role", owner_role = "app_admin_role", grant_option = true },
-    { object_type = "table", privileges = ["SELECT", "REFERENCES", "TRIGGER", "INSERT", "UPDATE", "DELETE"], role = "app_write_role", owner_role = "app_admin_role", grant_option = false },
-    { object_type = "sequence", privileges = ["SELECT", "USAGE"], role = "app_write_role", owner_role = "app_admin_role", grant_option = false },
-    { object_type = "function", privileges = ["EXECUTE"], role = "app_write_role", owner_role = "app_admin_role", grant_option = false },
+    { object_type = "database", privileges = ["CONNECT"], objects = [], role = "app_write_role", owner_role = "app_admin_role", grant_option = false },
+    { object_type = "type", privileges = ["USAGE"], objects = [], role = "app_write_role", owner_role = "app_admin_role", grant_option = true },
+    { object_type = "table", privileges = ["SELECT", "REFERENCES", "TRIGGER", "INSERT", "UPDATE", "DELETE"], objects = [], role = "app_write_role", owner_role = "app_admin_role", grant_option = false },
+    { object_type = "sequence", privileges = ["SELECT", "USAGE"], objects = [], role = "app_write_role", owner_role = "app_admin_role", grant_option = false },
+    { object_type = "function", privileges = ["EXECUTE"], objects = [], role = "app_write_role", owner_role = "app_admin_role", grant_option = false },
 
   ],
 

@@ -1,21 +1,21 @@
-CREATE OR REPLACE PROCEDURE FEED_STATS(CustomerId INTEGER) LANGUAGE plpgsql AS $$
+CREATE OR REPLACE PROCEDURE FEED_STATS(ProductId INTEGER) LANGUAGE plpgsql AS $$
 DECLARE
 
 infos record;
 
 BEGIN
 
--- retrieve the total Amount of customer's basket
+-- retrieve the total amount for a specific product
 for infos in (
-select firstName ||' ' ||lastName as CustomerName, sum(quantity * cost) as totalAmount
+select product.label as ProductLabel, sum(quantity * cost) as totalAmount
 from customer,product,basket
 where basket.customer_id = customer.id
 and basket.product_id = product.id
-and customer.id = CustomerId
-group by firstName ||' ' ||lastName)
+and product.id = ProductId
+group by product.label)
 loop
     -- insert into stats table
-    insert into stats (domain,value) values (infos.CustomerName,infos.totalAmount);
+    insert into stats (product,value) values (infos.ProductLabel,infos.totalAmount);
 end loop;
 
 END;

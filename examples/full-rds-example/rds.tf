@@ -23,7 +23,8 @@ module "rds" {
   # user cannot be used as it is a reserved word used by the engine"
   name     = var.inputs["db_name"]
   username = var.rds_superuser_name
-  password = var.rds_root_password # password is setted inside environment variable TF_VAR_rds_root_password
+  # password is setted inside environment variable TF_VAR_rds_root_password
+  password = var.rds_root_password
   port     = 5432
 
   multi_az = true
@@ -64,14 +65,14 @@ resource "aws_db_parameter_group" "postgres" {
   family      = var.rds_family
 
   dynamic "parameter" {
-    for_each = var.parameter_group_params
+    for_each = var.parameter_group_params["immediate"]
     content {
       name  = parameter.key
       value = parameter.value
     }
   }
   dynamic "parameter" {
-    for_each = var.extensions_parameter_group_params
+    for_each = var.parameter_group_params["pending-reboot"]
     content {
       name         = parameter.key
       value        = parameter.value

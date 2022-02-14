@@ -1599,22 +1599,6 @@ Keep in mind that you need to have :
 
 You can find a docker-compose file to start locally a postgresql (version 13.4) database and set the password for postgres user. Use the command `docker-compose -f docker-compose.yml up -d`.
 
-### Troubleshooting
-
-Despite all my professionalism in the development of this module, I encountered some problems during my testing phase: 
-
-```
-╷
-│ Error: could not execute revoke query: pq: tuple concurrently updated
-│
-│   with module.initdb.postgresql_grant.revoke_create_public[0],
-│   on ../../create-database/db_objects.tf line 168, in resource "postgresql_grant" "revoke_create_public":
-│  168: resource "postgresql_grant" "revoke_create_public" {
-│
-╵
-```
-Depending of your latency, relaunch your apply and it will ends sucessfully.
-
 
 ## Acknowledgements
 I would like to warmly thank my colleague and friend **Rene Okouia**, Mr Spinnaker, who allowed me to rise to another level of expertise on terraform and who participated in writing the very first version of this module.
