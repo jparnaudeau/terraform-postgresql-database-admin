@@ -1601,4 +1601,4 @@ You can find a docker-compose file to start locally a postgresql (version 13.4) 
 
 
 ## Acknowledgements
-I would like to warmly thank my colleague and friend **Rene Okouia**, Mr Spinnaker, who allowed me to rise to another level of expertise on terraform and who participated in writing the very first version of this module.
+I would like to warmly thank my colleague and friend **Rene Okouya**, Mr Spinnaker, who allowed me to rise to another level of expertise on terraform and who participated in writing the very first version of this module.
