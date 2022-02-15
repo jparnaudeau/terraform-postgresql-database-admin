@@ -23,8 +23,8 @@ Moreover, for a database deployed on the **public cloud AWS**, with the AWS Mana
 
 The module is divided into 2 sub-modules and several examples that illustrates different aspects covered by this module.
 
-* The creation of the database with the roles and the permissions associated with (named `grant` inside postgresql).
-* The creation of the user. For security perspectives, user inherits permissions from role. For user, used by a `human`, its password should have an expiration date. For non-human users (used inside an application), a `rotation mechanism` should increase your security. Using `AWS SecretsManager' could help you to achieve this requirement.
+* **create-database** : The creation of the database with the roles and the permissions associated with (named `grant` inside postgresql).
+* **create-users** : The creation of users and their permissions. For security perspectives, user inherits permissions from role. For user, used by a `human`, its password should have an expiration date. For non-human users (used inside an application), a `rotation mechanism` should increase your security. Using `AWS SecretsManager' could help you to achieve this requirement.
 
 ## Usecases
 
@@ -1601,4 +1601,4 @@ You can find a docker-compose file to start locally a postgresql (version 13.4) 
 
 
 ## Acknowledgements
-I would like to warmly thank my colleague and friend **Rene Okouia**, Mr Spinnaker, who allowed me to rise to another level of expertise on terraform and who participated in writing the very first version of this module.
+I would like to warmly thank my colleague and friend **Rene Okouya**, Mr Spinnaker, who allowed me to rise to another level of expertise on terraform and who participated in writing the very first version of this module.
