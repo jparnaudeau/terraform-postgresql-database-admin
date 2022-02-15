@@ -1,5 +1,13 @@
 # terraform-postgresql-database-admin
 
+## Versions
+
+| Version | Description |
+|---------|-------------|
+| >= 1.0.0| First version of the module.|
+| >=2.0.0 | Add support for fine-grained permissions on tables. Use version >=1.15.0 of the postgresql provider. New example `full-rds-example` to show interaction in a real case on AWS + pgaudit deployment + Logs indexation in elasticSearch. |
+
+
 ## Manage Securely your users and their permissions
 Terraform is a great tool to automate "everything" in modern IT. Based on my own experience, i will propose you an abstraction for the management "inside a database" : the management of users and their permissions in a postgresql database. 
 
