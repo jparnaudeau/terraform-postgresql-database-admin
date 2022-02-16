@@ -89,7 +89,7 @@ inputs = {
 }
 
 # Refresh or not refresh passwords
-refresh_passwords = [""]
+refresh_passwords = ["web","backoffice","batch","lemmy"]
 
 # set tags & environment
 environment = "test"
@@ -145,7 +145,7 @@ parameter_group_params = {
 ################################################
 # ElasticSearch
 ################################################
-create_elasticsearch = true
+create_elasticsearch = false
 es_instance_type     = "t3.small.elasticsearch"
 es_instance_count    = 1
 es_ebs_volume_size   = 10
