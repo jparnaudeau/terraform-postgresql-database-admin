@@ -5,7 +5,7 @@
 | Version | Description |
 |---------|-------------|
 | >= 1.0.0| First version of the module.|
-| >=2.0.0 | Add support for fine-grained permissions on tables. Use version >=1.15.0 of the postgresql provider. New example `full-rds-example` to show interaction in a real case on AWS + pgaudit deployment + Logs indexation in elasticSearch. |
+| >= 2.0.0| Add support for fine-grained permissions on tables. Use version >=1.15.0 of the postgresql provider. New example `full-rds-example` to show interaction in a real case on AWS + pgaudit deployment + Logs indexation in elasticSearch. |
 
 
 ## Manage Securely your users and their permissions
@@ -15,7 +15,7 @@ This module provides a way to manage securly and properly, the objects, inside a
 
 As it's done in the cloud, the concept of "Least Privilege" should be used. The usecase `full-rds-example` give an example of how to do that with this module.
 
-Managing users means managing their `passwords`. It could be tricky if you want do that in a secure way. Using `random_password` in terraform is not a good idea because the password is stored in clear text into the terraform remote state. Even there is other ways to do that, this module offers a system based on running a post playbook in which the password is generated. This playbook execute a script that you need to write. You could find several implementations in the examples directory.  
+Managing users means managing their `passwords`. It could be tricky if you want do that in a secure way. Using `random_password` in terraform is not a good idea because the password is stored in clear text into the terraform remote state. Even there is other ways to do that, this module offers a system based on running a `post-processing playbook` in which the password is generated. This playbook execute a script that you need to write. You could find several implementations in the examples directory.  
 
 ## Audit your database : PostgreSQL Audit Extension
 
@@ -31,8 +31,8 @@ Moreover, for a database deployed on the **public cloud AWS**, with the AWS Mana
 
 The module is divided into 2 sub-modules and several examples that illustrates different aspects covered by this module.
 
-* The creation of the database with the roles and the permissions associated with (named `grant` inside postgresql).
-* The creation of the user. For security perspectives, user inherits permissions from role. For user, used by a `human`, its password should have an expiration date. For non-human users (used inside an application), a `rotation mechanism` should increase your security. Using `AWS SecretsManager' could help you to achieve this requirement.
+* **create-database** : The creation of the database with the roles and the permissions associated with (named `grant` inside postgresql).
+* **create-users** : The creation of users and their permissions. For security perspectives, user inherits permissions from role. For user, used by a `human`, its password should have an expiration date. For non-human users (used inside an application), a `rotation mechanism` should increase your security. Using `AWS SecretsManager' could help you to achieve this requirement.
 
 ## Usecases
 
