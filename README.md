@@ -1488,7 +1488,7 @@ rkJggg=="/>
 |ReadOnly Role|The role with grants that allowing select on tables.|
 |Write Role|The role with grants that allowing select/insert/update/delete on tables.|
 |The user `application reporting`| This user is used inside the reporting application. Readonly permissions are suffisent for reporting.|
-|The user `application backend`| This user is used inside the backend application. Write permissions are need for this application. |
+|The user `application backend`| This user is used inside the backend application. Write permissions are needed for this application. |
 
 Notes : 
 

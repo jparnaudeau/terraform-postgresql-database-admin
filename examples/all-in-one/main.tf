@@ -37,7 +37,8 @@ locals {
 
 # the ssm parameters for storing username
 module "ssm_db_users" {
-  source  = "../../ssm-parameter"
+  source  = "jparnaudeau/ssm-parameter/aws"
+  version = "1.0.0"
 
   for_each = { for user in var.inputs["db_users"] : user.name => user }
 
@@ -70,8 +71,9 @@ resource "random_password" "passwords" {
 
 # the ssm parameters for storing password of each user
 module "fake_user_password" {
-  source  = "../../ssm-parameter"
-
+  source  = "jparnaudeau/ssm-parameter/aws"
+  version = "1.0.0"
+  
   for_each = { for user in var.inputs["db_users"] : user.name => user }
 
   namespace = local.namespace

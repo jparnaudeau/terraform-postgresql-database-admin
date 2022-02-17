@@ -96,10 +96,6 @@ module "create_users" {
 
 Note : we use terraform resource `random_password` to initialize passwords, but the real passwords are setted by the postprocessing playbook. So even if the value of random_password are in clear text in the tfstate, the real passwords are not stored in the tfstate. 
 
-### :warning: Important note:
-
-We highly recommand you using **explicitly a version tag of this module** instead of branch reference since the latter is changing frequently. (use **ref=v1.0.0**,  don't use **ref=master**) 
-
 
 ## Define the inputs
 
